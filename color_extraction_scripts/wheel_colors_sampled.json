@@ -1,0 +1,86 @@
+{
+  "Emotional Regulation": {
+    "1": "#fcfcb7",
+    "2": "#fff770",
+    "3": "#fff42a",
+    "4": "#fff000",
+    "5": "#fdd800"
+  },
+  "Social Interaction": {
+    "1": "#fef1b9",
+    "2": "#fde471",
+    "3": "#fdd42a",
+    "4": "#fdc601",
+    "5": "#fbb800"
+  },
+  "Speech": {
+    "1": "#fee1b8",
+    "2": "#fdc071",
+    "3": "#fda229",
+    "4": "#fc8201",
+    "5": "#f94100"
+  },
+  "Sensory Sensitivities": {
+    "1": "#fdceba",
+    "2": "#fba073",
+    "3": "#fa6e2c",
+    "4": "#f73f01",
+    "5": "#f50e00"
+  },
+  "Nonverbal Communication": {
+    "1": "#ffc0bc",
+    "2": "#ff7f72",
+    "3": "#fd4029",
+    "4": "#fe0000",
+    "5": "#fe0000"
+  },
+  "Perception": {
+    "1": "#e5c6e5",
+    "2": "#d08cd0",
+    "3": "#b852b6",
+    "4": "#a3199f",
+    "5": "#8a0187"
+  },
+  "Executive Functions": {
+    "1": "#dbc1e5",
+    "2": "#b684cb",
+    "3": "#9248b0",
+    "4": "#6c0b96",
+    "5": "#57027b"
+  },
+  "Intense Interests": {
+    "1": "#d8cafe",
+    "2": "#b195ff",
+    "3": "#8b62fd",
+    "4": "#652dfe",
+    "5": "#3e00fd"
+  },
+  "Cognitive Flexibility": {
+    "1": "#bdd2ff",
+    "2": "#78a7fe",
+    "3": "#387cff",
+    "4": "#004ffe",
+    "5": "#0023fe"
+  },
+  "Repetitive Behaviors": {
+    "1": "#bedfda",
+    "2": "#7fbfb5",
+    "3": "#3fa091",
+    "4": "#007f6b",
+    "5": "#005f47"
+  },
+  "Motor Skills/Coordination": {
+    "1": "#c3ead0",
+    "2": "#85d59e",
+    "3": "#46c26d",
+    "4": "#0aad3d",
+    "5": "#00980a"
+  },
+  "Sensory Processing": {
+    "1": "#dff7c9",
+    "2": "#bfee91",
+    "3": "#9de75b",
+    "4": "#7cdf25",
+    "5": "#5bd700"
+  }
+}
