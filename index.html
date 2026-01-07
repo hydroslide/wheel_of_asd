@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Autism Wheel</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #F7F7F7;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .wheel-container {
+            background-color: #F7F7F7;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #autism-wheel {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .wheel-label {
+            font-weight: bold;
+            font-size: 14px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            fill: #000;
+            user-select: none;
+        }
+
+        .wheel-segment {
+            stroke: white;
+            stroke-width: 2;
+            cursor: pointer;
+        }
+
+        .wheel-segment.unfilled {
+            fill: #999;
+        }
+
+        .wheel-segment:hover {
+            stroke-width: 4;
+        }
+
+        .wheel-outline {
+            fill: none;
+            stroke-width: 4;
+            pointer-events: none;
+        }
+
+        /* Tooltip Styles */
+        .tooltip {
+            position: fixed;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 8px;
+            padding: 12px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            max-width: 400px;
+            z-index: 1000;
+            pointer-events: none;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            opacity: 0;
+            transition: opacity 150ms ease-in-out;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip-header {
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: #222;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 6px;
+        }
+
+        .tooltip-content {
+            color: #444;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+
+
+        /* Responsive tooltip adjustments */
+        @media (max-width: 768px) {
+            .tooltip {
+                max-width: 320px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tooltip {
+                max-width: 280px;
+                font-size: 12px;
+                padding: 10px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wheel-container">
+        <svg id="autism-wheel" width="700" height="700" viewBox="0 0 700 700">
+            <!-- Wheel segments will be generated here -->
+        </svg>
+    </div>
+
+    <!-- Tooltip Element -->
+    <div id="trait-tooltip" class="tooltip">
+        <div class="tooltip-header"></div>
+        <div class="tooltip-content"></div>
+    </div>
+
+    <script>
+        // Configuration constants
+        const WHEEL_CENTER = { x: 350, y: 350 };
+        const INNER_RADIUS = 50;
+        const OUTER_RADIUS = 250;
+        const SEGMENT_COUNT = 5;
+        const SLICE_COUNT = 12;
+        const SLICE_ANGLE = (2 * Math.PI) / SLICE_COUNT;
+
+        // Wheel labels (clockwise from top)
+        const WHEEL_LABELS = [
+            'EMOTIONAL REGULATION',
+            'SOCIAL INTERACTION',
+            'SPEECH',
+            'SENSORY SENSITIVITIES',
+            'NONVERBAL COMMUNICATION',
+            'PERCEPTION',
+            'EXECUTIVE FUNCTIONS',
+            'INTENSE INTERESTS',
+            'COGNITIVE FLEXIBILITY',
+            'REPETITIVE BEHAVIORS',
+            'MOTOR SKILLS/COORDINATION',
+            'SENSORY PROCESSING'
+        ];
+
+        // Color palette for each slice (base hues)
+        // const SLICE_COLORS = [
+        //     { h: 56, s: 100, l: 40 },  // EMOTIONAL REGULATION - bright yellow
+        //     { h: 46, s: 100, l: 40 },   // SOCIAL INTERACTION - yellow-orange
+        //     { h: 36, s: 100, l: 40 },   // SPEECH - orange
+        //     { h: 26, s: 100, l: 40 },    // SENSORY SENSITIVITIES - red
+        //     { h: 0, s: 100, l: 100 },  // NONVERBAL COMMUNICATION - magenta
+        //     { h: 270, s: 70, l: 65 },  // PERCEPTION - purple
+        //     { h: 250, s: 75, l: 60 },  // EXECUTIVE FUNCTIONS - blue-purple
+        //     { h: 220, s: 80, l: 55 },  // INTENSE INTERESTS - blue
+        //     { h: 200, s: 85, l: 60 },  // COGNITIVE FLEXIBILITY - sky blue
+        //     { h: 175, s: 70, l: 55 },  // REPETITIVE BEHAVIORS - teal
+        //     { h: 120, s: 80, l: 50 },  // MOTOR SKILLS/COORDINATION - lime green
+        //     { h: 90, s: 70, l: 50 }    // SENSORY PROCESSING - green
+        // ];
+        const SLICE_COLORS = [
+            { h: 60, s: 100, l: 50 },  // EMOTIONAL REGULATION - bright yellow
+            { h: 45, s: 80, l: 60 },   // SOCIAL INTERACTION - yellow-orange
+            { h: 25, s: 85, l: 65 },   // SPEECH - orange
+            { h: 0, s: 85, l: 60 },    // SENSORY SENSITIVITIES - red
+            { h: 320, s: 80, l: 60 },  // NONVERBAL COMMUNICATION - magenta
+            { h: 270, s: 70, l: 65 },  // PERCEPTION - purple
+            { h: 250, s: 75, l: 60 },  // EXECUTIVE FUNCTIONS - blue-purple
+            { h: 220, s: 80, l: 55 },  // INTENSE INTERESTS - blue
+            { h: 200, s: 85, l: 60 },  // COGNITIVE FLEXIBILITY - sky blue
+            { h: 175, s: 70, l: 55 },  // REPETITIVE BEHAVIORS - teal
+            { h: 120, s: 80, l: 50 },  // MOTOR SKILLS/COORDINATION - lime green
+            { h: 90, s: 70, l: 50 }    // SENSORY PROCESSING - green
+        ];
+
+        // State management
+        let wheelState = Array(SLICE_COUNT).fill(0); // All slices start with 0 fill level
+        let isDragging = false;
+        let currentSlice = -1;
+        let hoveredSlice = -1;
+
+        // Tooltip system
+        let tooltip = null;
+        let tooltipTimeout = null;
+
+        // Embedded traits data (from references/traits.json)
+        // <!-- TRAITS_DATA_START -->
+        const traitsData = [
+          {
+            "trait": "Emotional Regulation",
+            "definition": "The ability to manage and respond to your emotions in a way that fits the situation. It's like having a volume control for your feelings - knowing when to turn them up or down.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You get frustrated more easily than friends when things don't go as planned, but can usually calm yourself down pretty quickly."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "Unexpected changes make you anxious or upset, and you need time alone or specific strategies (deep breathing, listening to music) to regulate."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You have regular meltdowns or shutdowns when overwhelmed, need a calm-down space at school, and require help identifying and managing your emotions."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Emotional dysregulation happens frequently throughout the day, significantly disrupting school and relationships, and you need consistent support and intervention."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You experience severe, intense emotional responses multiple times daily that can include aggression or self-harm, requiring intensive behavioral support and crisis intervention."
+              }
+            ]
+          },
+          {
+            "trait": "Social Interaction",
+            "definition": "How you connect, communicate, and build relationships with other people. This includes understanding social cues, making friends, and navigating conversations.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You have friends and can chat with people, but sometimes miss hints or don't know when someone's done talking to you."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "Making friends takes effort, you prefer talking about your interests over small talk, and group conversations can be confusing or exhausting."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You struggle to start conversations or make friends without support, have trouble with back-and-forth dialogue, and social situations feel stressful and confusing."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Social interactions are very difficult - you rarely initiate them, respond minimally when others approach you, and need significant coaching to engage socially."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You show very limited interest in or response to social interaction, make unusual approaches only to meet basic needs, and require intensive support to participate socially."
+              }
+            ]
+          },
+          {
+            "trait": "Speech",
+            "definition": "The characteristics of how you use spoken language - including your rhythm, tone, pitch, conversation flow, word choice, and how you express yourself verbally in real-time.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "Your voice sounds a bit monotone or you speak more formally than others, but people understand you fine in conversations."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You repeat favorite phrases, speak with unusual rhythm or pitch, struggle with word-finding, or your speech sounds scripted or robotic at times."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You use significant echolalia to communicate, have major difficulty with conversation flow and pragmatics (knowing what to say when), and speak in a very flat or odd tone."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Your speech is severely affected by prosody issues, you rely heavily on scripted phrases or immediate echolalia, and expressing spontaneous thoughts verbally is extremely difficult."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You have minimal functional speech - using only a few scripted words or phrases with severe difficulties in rhythm, tone, and real-time verbal expression."
+              }
+            ]
+          },
+          {
+            "trait": "Sensory Sensitivities",
+            "definition": "Being extra sensitive (hypersensitive) or less sensitive (hyposensitive) to sensory input like sounds, lights, textures, smells, or touch. This is about your tolerance and reactions to specific sensory experiences.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "Some sounds or textures bother you more than they bother others, but it doesn't really affect what you can do."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You avoid tags in clothes, certain foods because of texture, or need to cover your ears during fire drills, but can mostly manage."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "Multiple sensitivities affect your daily life - you can only wear certain fabrics, need sunglasses indoors, avoid crowded places, and plan around sensory triggers."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Severe sensitivities to light, sound, touch, or smell significantly limit activities and locations, cause frequent distress, and require extensive environmental modifications."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "Extreme sensitivities to multiple stimuli make most environments intolerable, you can only function in highly controlled sensory conditions, and exposure causes severe physical distress."
+              }
+            ]
+          },
+          {
+            "trait": "Nonverbal Communication",
+            "definition": "Communication without words - using and understanding body language, facial expressions, gestures, tone of voice, and eye contact.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You make less eye contact than others or your expressions don't always match your feelings, but you get by in conversations."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You have trouble reading facial expressions or tone of voice, and people say your body language seems different or hard to read."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You rarely use gestures, struggle to interpret others' nonverbal cues, and miss most emotional signals from facial expressions or body language."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "You don't naturally use or understand nonverbal communication - no pointing, minimal facial expressions, avoid eye contact completely, and can't read others' emotions from their faces."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You show almost no nonverbal communication and cannot interpret any body language, facial expressions, or gestures without explicit verbal explanation."
+              }
+            ]
+          },
+          {
+            "trait": "Perception",
+            "definition": "How your brain interprets what you see, hear, and experience. People with autism often notice details others miss but might process information differently.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You notice small details in patterns or sounds that others miss - like hearing conversations from far away or spotting tiny changes in your environment."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You focus on details and sometimes miss the main point of a story or conversation, or need extra time to process what you're seeing and hearing."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You process visual and auditory information so differently that noisy environments are overwhelming, you struggle with the 'big picture,' and following fast conversations is very hard."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Your perceptual differences make it difficult to understand complex social scenes, integrate information from different senses, or navigate busy environments safely."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "Severe perceptual processing differences mean you need intensive support to interpret and respond to your environment, with significant challenges understanding what you see and hear."
+              }
+            ]
+          },
+          {
+            "trait": "Executive Functions",
+            "definition": "Mental skills that help you plan, organize, remember instructions, manage time, start tasks, and switch between activities. Like the 'manager' in your brain.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You occasionally forget assignments or lose track of time, but can manage with occasional reminders or a planner."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You need help getting started on tasks, rely on visual schedules and checklists, and find organizing your stuff or managing time pretty challenging."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You need regular support for planning and organizing, struggle significantly with multi-step tasks, and require structured systems to manage your day."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Executive function difficulties severely limit your independence - you need frequent reminders and assistance for most planning, organization, and task completion."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You require constant, direct support for all executive tasks - cannot initiate, plan, or organize activities independently and need step-by-step guidance throughout the day."
+              }
+            ]
+          },
+          {
+            "trait": "Intense Interests",
+            "definition": "Having extremely focused interests or hobbies that you're deeply passionate about and can spend hours learning about or doing.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You have topics you're really into and love discussing them, but can talk about other things when needed."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "Your interests take up a lot of your time and you tend to bring conversations back to your favorite topics, but you can still do homework and other activities."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "Your intense interests dominate much of your day, you get very distressed when interrupted, and balancing them with schoolwork or chores is challenging."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Your interests consume most of your focus, making it very difficult to engage with required activities, and transitions away from them cause significant distress or meltdowns."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You're so intensely absorbed in your interests that participating in necessary activities (school, self-care, meals) is nearly impossible without intensive intervention and support."
+              }
+            ]
+          },
+          {
+            "trait": "Cognitive Flexibility",
+            "definition": "The ability to adapt your thinking when situations change, switch between tasks, or see things from different perspectives. Sometimes called 'mental flexibility.'",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "Unexpected changes annoy you and you prefer routines, but you can adapt after taking a moment to adjust."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "Changes to plans cause noticeable stress, you need advance warning for transitions, and seeing things from other perspectives takes effort."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "Routine changes cause significant distress, you get stuck on ideas and have trouble shifting, and need structured support to handle unexpected situations."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Changes cause severe anxiety or meltdowns, you require highly predictable routines with extensive preparation for any variations, and thinking flexibly is extremely difficult."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "Even small changes to routines cause extreme distress, you need intensive support to cope with any unpredictability, and rigid thinking patterns dominate how you approach everything."
+              }
+            ]
+          },
+          {
+            "trait": "Repetitive Behaviors",
+            "definition": "Repeated movements, actions, or sounds that help you feel calm, focused, or express emotions. Often called 'stimming' (self-stimulating behaviors).",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You tap, fidget, or bounce when concentrating or anxious - subtle movements that help you but others barely notice."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You regularly rock, flap your hands, or repeat sounds/phrases - these are noticeable but help you regulate and don't interfere with activities."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "Your repetitive behaviors (pacing, hand-flapping, vocal sounds) are frequent and intense, sometimes making it harder to focus on tasks or causing concern from others."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Repetitive behaviors are constant and difficult to redirect, occasionally including self-injurious actions that require monitoring and intervention strategies."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "Severe, persistent repetitive or self-injurious behaviors occur throughout the day, require continuous supervision for safety, and significantly limit your ability to engage in activities."
+              }
+            ]
+          },
+          {
+            "trait": "Motor Skills/Coordination",
+            "definition": "The ability to control and coordinate your body movements, including both large movements (like running or catching) and small movements (like writing or buttoning).",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "Your handwriting is messier than average and you're not the most coordinated at sports, but you manage daily tasks fine."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You struggle with fine motor tasks like tying shoes or neat handwriting, and activities like catching a ball or riding a bike took you longer to learn."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "Motor challenges affect many tasks - you need extra time for writing, help with buttons and zippers, and have noticeable difficulty with balance and coordination."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "Significant motor impairments affect most physical activities - you need help with many self-care tasks, have an unsteady gait, and both fine and gross motor tasks are very difficult."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "Severe motor coordination challenges require extensive support for physical activities including walking, eating, dressing, and maintaining balance, though you can still participate with assistance."
+              }
+            ]
+          },
+          {
+            "trait": "Sensory Processing",
+            "definition": "How your brain organizes and integrates sensory information to help you function, focus, and regulate. This includes seeking out sensory input you need, filtering out distractions, and using sensory experiences to stay alert or calm.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You fidget with a pen or bounce your leg to help you concentrate, just like many people do."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You need to chew gum, listen to music, or use a fidget toy to focus in class, and feel a bit 'off' or distracted without these tools."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You need regular movement breaks, specific textures to touch, or background sounds to stay regulated and focused throughout the day."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "You constantly seek intense sensory input (spinning, crashing, deep pressure) and have significant trouble organizing your thoughts or focusing without it."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You need continuous, intensive sensory input and support throughout the day to stay regulated, and struggle to integrate information from multiple senses at once."
+              }
+            ]
+          }
+        ];
+        // <!-- TRAITS_DATA_END -->
+
+        // Color generation functions
+        function getSegmentColor(sliceIndex, segmentIndex, fillLevel) {
+            // If this segment is beyond the fill level, return gradient gray
+            if (segmentIndex >= fillLevel) {
+                // Create white-to-medium-gray gradient based on segment position
+                const lightness = 95 - (segmentIndex * 12); // 95%, 83%, 71%, 59%, 47%
+                return `hsl(0, 0%, ${lightness}%)`;
+            }
+
+            const baseColor = SLICE_COLORS[sliceIndex];
+
+            // Calculate saturation progression (increases from inner to outer)
+            // Start with high saturation (what was 3rd segment) and scale to full saturation
+            const saturationMultiplier = 0.925 + (segmentIndex * 0.01875); // From 92.5% to 100%
+
+            // Calculate lightness boost (decreases from inner to outer for pastel effect)
+            const lightnessBoost = (SEGMENT_COUNT - 1 - segmentIndex) * 10; // +40 for innermost, 0 for outermost
+
+            const h = baseColor.h;
+            const s = Math.min(100, baseColor.s * saturationMultiplier);
+            const l = Math.max(20, Math.min(95, baseColor.l + lightnessBoost));
+
+            return `hsl(${h}, ${s}%, ${l}%)`;
+        }
+
+        function getOutlineColor(sliceIndex) {
+            const baseColor = SLICE_COLORS[sliceIndex];
+            return `hsl(${baseColor.h}, 100%, 40%)`; // Full saturation, darker
+        }
+
+        // Update segment colors based on current state
+        function updateWheelColors() {
+            const segments = document.querySelectorAll('.wheel-segment');
+
+            segments.forEach(segment => {
+                const sliceIndex = parseInt(segment.getAttribute('data-slice'));
+                const segmentIndex = parseInt(segment.getAttribute('data-segment'));
+                const fillLevel = wheelState[sliceIndex];
+
+                const color = getSegmentColor(sliceIndex, segmentIndex, fillLevel);
+                segment.style.fill = color;
+
+                // Update class based on fill status
+                if (segmentIndex >= fillLevel) {
+                    segment.classList.add('unfilled');
+                    segment.classList.remove('filled');
+                } else {
+                    segment.classList.remove('unfilled');
+                    segment.classList.add('filled');
+                }
+            });
+        }
+
+        // Helper functions for traits data
+
+        function getTraitData(sliceIndex) {
+            if (!traitsData || sliceIndex < 0 || sliceIndex >= traitsData.length) {
+                return null;
+            }
+            return traitsData[sliceIndex];
+        }
+
+        function getLevelData(sliceIndex, segmentIndex) {
+            const trait = getTraitData(sliceIndex);
+            if (!trait || segmentIndex < 0 || segmentIndex >= 5) {
+                return null;
+            }
+            return trait.intensityLevels[segmentIndex];
+        }
+
+        // Helper function to create SVG path for a segment
+        function createSegmentPath(centerX, centerY, innerRadius, outerRadius, startAngle, endAngle) {
+            const x1 = centerX + innerRadius * Math.cos(startAngle);
+            const y1 = centerY + innerRadius * Math.sin(startAngle);
+            const x2 = centerX + outerRadius * Math.cos(startAngle);
+            const y2 = centerY + outerRadius * Math.sin(startAngle);
+            const x3 = centerX + outerRadius * Math.cos(endAngle);
+            const y3 = centerY + outerRadius * Math.sin(endAngle);
+            const x4 = centerX + innerRadius * Math.cos(endAngle);
+            const y4 = centerY + innerRadius * Math.sin(endAngle);
+
+            const largeArcFlag = endAngle - startAngle <= Math.PI ? "0" : "1";
+
+            const pathData = [
+                `M ${x1} ${y1}`,
+                `L ${x2} ${y2}`,
+                `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
+                `L ${x4} ${y4}`,
+                `A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+                `Z`
+            ].join(' ');
+
+            return pathData;
+        }
+
+        // Generate wheel slices
+        function generateWheelSlices() {
+            const svg = document.getElementById('autism-wheel');
+
+            for (let sliceIndex = 0; sliceIndex < SLICE_COUNT; sliceIndex++) {
+                // Calculate angles for this slice (starting from top, going clockwise)
+                const startAngle = (sliceIndex * SLICE_ANGLE) - (Math.PI / 2); // Start from top
+                const endAngle = ((sliceIndex + 1) * SLICE_ANGLE) - (Math.PI / 2);
+
+                // Create segments for this slice (5 radial segments)
+                for (let segmentIndex = 0; segmentIndex < SEGMENT_COUNT; segmentIndex++) {
+                    const radiusStep = (OUTER_RADIUS - INNER_RADIUS) / SEGMENT_COUNT;
+                    const innerR = INNER_RADIUS + (segmentIndex * radiusStep);
+                    const outerR = INNER_RADIUS + ((segmentIndex + 1) * radiusStep);
+
+                    // Create path element
+                    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const pathData = createSegmentPath(
+                        WHEEL_CENTER.x,
+                        WHEEL_CENTER.y,
+                        innerR,
+                        outerR,
+                        startAngle,
+                        endAngle
+                    );
+
+                    path.setAttribute('d', pathData);
+                    path.setAttribute('class', 'wheel-segment unfilled');
+                    path.setAttribute('data-slice', sliceIndex);
+                    path.setAttribute('data-segment', segmentIndex);
+
+                    // Add to SVG
+                    svg.appendChild(path);
+                }
+            }
+        }
+
+        // Generate text labels
+        function generateWheelLabels() {
+            const svg = document.getElementById('autism-wheel');
+            const labelRadius = OUTER_RADIUS + 52; // Position labels outside the wheel
+
+            for (let i = 0; i < SLICE_COUNT; i++) {
+                // Calculate the center angle for this slice
+                const centerAngle = (i * SLICE_ANGLE) - (Math.PI / 2) + (SLICE_ANGLE / 2);
+
+                // Calculate position for the label
+                const x = WHEEL_CENTER.x + labelRadius * Math.cos(centerAngle);
+                const y = WHEEL_CENTER.y + labelRadius * Math.sin(centerAngle);
+
+                // Create text element
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x);
+                text.setAttribute('class', 'wheel-label');
+                text.setAttribute('text-anchor', 'middle'); // Always center-align
+
+                // Split label into words and create tspan elements for each line
+                const words = WHEEL_LABELS[i].split(/[\s\/]+/); // Split on spaces and forward slashes
+                const lineHeight = 1.2; // em units
+
+                // Calculate vertical offset to center the text block
+                const totalLines = words.length;
+                const verticalOffset = -((totalLines - 1) * lineHeight * 0.5);
+
+                words.forEach((word, wordIndex) => {
+                    const tspan = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');
+                    tspan.textContent = word;
+                    tspan.setAttribute('x', x);
+
+                    if (wordIndex === 0) {
+                        // First line: set the base y position with vertical centering
+                        tspan.setAttribute('dy', `${verticalOffset}em`);
+                    } else {
+                        // Subsequent lines: move down by line height
+                        tspan.setAttribute('dy', `${lineHeight}em`);
+                    }
+
+                    text.appendChild(tspan);
+                });
+
+                // Set the base y position
+                text.setAttribute('y', y);
+                svg.appendChild(text);
+            }
+        }
+
+        // Interactive functionality
+        function getMousePosition(event, svg) {
+            const rect = svg.getBoundingClientRect();
+            return {
+                x: event.clientX - rect.left,
+                y: event.clientY - rect.top
+            };
+        }
+
+        function getSliceFromAngle(mouseX, mouseY) {
+            const dx = mouseX - WHEEL_CENTER.x;
+            const dy = mouseY - WHEEL_CENTER.y;
+
+            // Calculate angle from center (0 = right, increase counterclockwise)
+            let angle = Math.atan2(dy, dx);
+
+            // Adjust to start from top and go clockwise
+            angle = angle + Math.PI / 2;
+            if (angle < 0) angle += 2 * Math.PI;
+
+            // Convert to slice index from angle
+            const sliceIndex = Math.floor(angle / SLICE_ANGLE) % SLICE_COUNT;
+            return sliceIndex;
+        }
+
+        function getFillLevelFromRadius(mouseX, mouseY) {
+            const dx = mouseX - WHEEL_CENTER.x;
+            const dy = mouseY - WHEEL_CENTER.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            // Convert distance to fill level (0-5)
+            if (distance < INNER_RADIUS) return 0;
+            if (distance > OUTER_RADIUS) return SEGMENT_COUNT;
+
+            const radiusStep = (OUTER_RADIUS - INNER_RADIUS) / SEGMENT_COUNT;
+            const fillLevel = Math.ceil((distance - INNER_RADIUS) / radiusStep);
+            return Math.max(0, Math.min(SEGMENT_COUNT, fillLevel));
+        }
+
+        // Tooltip functions
+        function showTooltip(header, content, x, y) {
+            if (!tooltip) return;
+
+            // Clear any existing timeout
+            if (tooltipTimeout) {
+                clearTimeout(tooltipTimeout);
+            }
+
+            // Update tooltip content
+            tooltip.querySelector('.tooltip-header').textContent = header;
+            tooltip.querySelector('.tooltip-content').textContent = content;
+
+            // Position tooltip
+            positionTooltip(x, y);
+
+            // Show with delay
+            tooltipTimeout = setTimeout(() => {
+                tooltip.classList.add('show');
+            }, 300);
+        }
+
+        function hideTooltip() {
+            if (!tooltip) return;
+
+            // Clear show timeout if it hasn't fired yet
+            if (tooltipTimeout) {
+                clearTimeout(tooltipTimeout);
+            }
+
+            // Hide with short delay
+            tooltipTimeout = setTimeout(() => {
+                tooltip.classList.remove('show');
+            }, 100);
+        }
+
+        function positionTooltip(mouseX, mouseY) {
+            if (!tooltip) return;
+
+            // Get tooltip dimensions (may need to make visible temporarily to measure)
+            const tempVisible = !tooltip.classList.contains('show');
+            if (tempVisible) {
+                tooltip.style.visibility = 'hidden';
+                tooltip.style.display = 'block';
+            }
+
+            const rect = tooltip.getBoundingClientRect();
+            const tooltipWidth = rect.width;
+            const tooltipHeight = rect.height;
+
+            if (tempVisible) {
+                tooltip.style.display = '';
+                tooltip.style.visibility = '';
+            }
+
+            // Get viewport dimensions
+            const viewportWidth = window.innerWidth;
+            const viewportHeight = window.innerHeight;
+
+            // Default position: 15px right and down from cursor
+            let x = mouseX + 15;
+            let y = mouseY + 15;
+
+            // Check right boundary
+            if (x + tooltipWidth > viewportWidth - 20) {
+                x = mouseX - tooltipWidth - 15; // Show on left
+            }
+
+            // Check bottom boundary
+            if (y + tooltipHeight > viewportHeight - 20) {
+                y = mouseY - tooltipHeight - 15; // Show above
+            }
+
+            // Keep within bounds
+            x = Math.max(10, x);
+            y = Math.max(10, y);
+
+            // Apply position
+            tooltip.style.left = `${x}px`;
+            tooltip.style.top = `${y}px`;
+        }
+
+        function showTraitTooltip(sliceIndex, mouseX, mouseY) {
+            const traitData = getTraitData(sliceIndex);
+            if (!traitData) return;
+
+            const header = traitData.trait.toUpperCase();
+            const content = traitData.definition;
+            showTooltip(header, content, mouseX, mouseY);
+        }
+
+        function showLevelTooltip(sliceIndex, segmentIndex, mouseX, mouseY) {
+            const levelData = getLevelData(sliceIndex, segmentIndex);
+            if (!levelData) return;
+
+            const header = `Level ${levelData.level}: ${levelData.description}`;
+            const content = levelData.example;
+            showTooltip(header, content, mouseX, mouseY);
+        }
+
+        function setupTooltips() {
+            console.log('Setting up tooltips with', traitsData.length, 'traits');
+
+            // Setup label tooltips
+            const labels = document.querySelectorAll('.wheel-label');
+            labels.forEach((label, index) => {
+                const sliceIndex = index; // Labels are generated in order
+
+                label.addEventListener('mouseenter', (e) => {
+                    if (isDragging) return; // Don't show tooltips while dragging
+                    showTraitTooltip(sliceIndex, e.clientX, e.clientY);
+                });
+
+                label.addEventListener('mousemove', (e) => {
+                    if (isDragging) return;
+                    positionTooltip(e.clientX, e.clientY);
+                });
+
+                label.addEventListener('mouseleave', () => {
+                    hideTooltip();
+                });
+            });
+
+            // Setup segment tooltips
+            const segments = document.querySelectorAll('.wheel-segment');
+            segments.forEach(segment => {
+                segment.addEventListener('mouseenter', (e) => {
+                    if (isDragging) return; // Don't show tooltips while dragging
+
+                    const sliceIndex = parseInt(segment.getAttribute('data-slice'));
+                    const segmentIndex = parseInt(segment.getAttribute('data-segment'));
+                    showLevelTooltip(sliceIndex, segmentIndex, e.clientX, e.clientY);
+                });
+
+                segment.addEventListener('mousemove', (e) => {
+                    if (isDragging) return;
+                    positionTooltip(e.clientX, e.clientY);
+                });
+
+                segment.addEventListener('mouseleave', () => {
+                    hideTooltip();
+                });
+            });
+
+            console.log('Tooltips enabled for', labels.length, 'labels and', segments.length, 'segments');
+        }
+
+        // Outline management
+        function updateSliceOutlines() {
+            // Remove existing outlines
+            const existingOutlines = document.querySelectorAll('.slice-outline');
+            existingOutlines.forEach(outline => outline.remove());
+
+            // Add outline for hovered or dragging slice
+            if (hoveredSlice !== -1 || (isDragging && currentSlice !== -1)) {
+                const sliceToOutline = isDragging ? currentSlice : hoveredSlice;
+                createSliceOutline(sliceToOutline);
+            }
+        }
+
+        function createSliceOutline(sliceIndex) {
+            const svg = document.getElementById('autism-wheel');
+
+            // Calculate angles for this slice
+            const startAngle = (sliceIndex * SLICE_ANGLE) - (Math.PI / 2);
+            const endAngle = ((sliceIndex + 1) * SLICE_ANGLE) - (Math.PI / 2);
+
+            // Create outer outline path
+            const outerOutline = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            const outerPathData = createSegmentPath(
+                WHEEL_CENTER.x,
+                WHEEL_CENTER.y,
+                INNER_RADIUS,
+                OUTER_RADIUS,
+                startAngle,
+                endAngle
+            );
+
+            outerOutline.setAttribute('d', outerPathData);
+            outerOutline.setAttribute('class', 'slice-outline');
+            outerOutline.setAttribute('stroke', getOutlineColor(sliceIndex));
+            outerOutline.setAttribute('stroke-width', '4');
+            outerOutline.setAttribute('fill', 'none');
+            outerOutline.setAttribute('pointer-events', 'none');
+
+            svg.appendChild(outerOutline);
+        }
+
+        function setupInteractivity() {
+            const svg = document.getElementById('autism-wheel');
+
+            svg.addEventListener('mousedown', (event) => {
+                const mousePos = getMousePosition(event, svg);
+                const sliceIndex = getSliceFromAngle(mousePos.x, mousePos.y);
+                const fillLevel = getFillLevelFromRadius(mousePos.x, mousePos.y);
+
+                // Only interact if we're within the wheel bounds
+                const distance = Math.sqrt(
+                    Math.pow(mousePos.x - WHEEL_CENTER.x, 2) +
+                    Math.pow(mousePos.y - WHEEL_CENTER.y, 2)
+                );
+
+                if (distance >= INNER_RADIUS && distance <= OUTER_RADIUS) {
+                    isDragging = true;
+                    currentSlice = sliceIndex;
+                    wheelState[sliceIndex] = fillLevel;
+                    updateWheelColors();
+                    updateSliceOutlines();
+                }
+            });
+
+            svg.addEventListener('mousemove', (event) => {
+                const mousePos = getMousePosition(event, svg);
+                const distance = Math.sqrt(
+                    Math.pow(mousePos.x - WHEEL_CENTER.x, 2) +
+                    Math.pow(mousePos.y - WHEEL_CENTER.y, 2)
+                );
+
+                if (isDragging && currentSlice !== -1) {
+                    // Continue dragging
+                    const fillLevel = getFillLevelFromRadius(mousePos.x, mousePos.y);
+                    wheelState[currentSlice] = fillLevel;
+                    updateWheelColors();
+                } else if (!isDragging && distance >= INNER_RADIUS && distance <= OUTER_RADIUS) {
+                    // Update hover state
+                    const newHoveredSlice = getSliceFromAngle(mousePos.x, mousePos.y);
+                    if (newHoveredSlice !== hoveredSlice) {
+                        hoveredSlice = newHoveredSlice;
+                        updateSliceOutlines();
+                    }
+                } else if (!isDragging) {
+                    // Mouse outside wheel, clear hover
+                    if (hoveredSlice !== -1) {
+                        hoveredSlice = -1;
+                        updateSliceOutlines();
+                    }
+                }
+            });
+
+            svg.addEventListener('mouseleave', (event) => {
+                // Clear hover state when leaving SVG, but only if not dragging
+                if (!isDragging && hoveredSlice !== -1) {
+                    hoveredSlice = -1;
+                    updateSliceOutlines();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    currentSlice = -1;
+                    updateSliceOutlines();
+                }
+            });
+
+            // Prevent context menu on right click
+            svg.addEventListener('contextmenu', (event) => {
+                event.preventDefault();
+            });
+        }
+
+        // Initialize the wheel
+        function initWheel() {
+            console.log('Initializing wheel...');
+
+            // Generate wheel components
+            generateWheelSlices();
+            generateWheelLabels();
+            updateWheelColors();
+            setupInteractivity();
+
+            // Initialize tooltip system
+            tooltip = document.getElementById('trait-tooltip');
+            setupTooltips();
+
+            console.log('Wheel complete with interactivity and tooltips');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initWheel);
+    </script>
+</body>
+</html>

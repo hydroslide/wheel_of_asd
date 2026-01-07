@@ -1,0 +1,374 @@
+[
+  {
+    "trait": "Sensory Processing",
+    "definition": "How your brain organizes and integrates sensory information to help you function, focus, and regulate. This includes seeking out sensory input you need, filtering out distractions, and using sensory experiences to stay alert or calm.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You fidget with a pen or bounce your leg to help you concentrate, just like many people do."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You need to chew gum, listen to music, or use a fidget toy to focus in class, and feel a bit 'off' or distracted without these tools."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "You need regular movement breaks, specific textures to touch, or background sounds to stay regulated and focused throughout the day."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "You constantly seek intense sensory input (spinning, crashing, deep pressure) and have significant trouble organizing your thoughts or focusing without it."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "You need continuous, intensive sensory input and support throughout the day to stay regulated, and struggle to integrate information from multiple senses at once."
+      }
+    ]
+  },
+  {
+    "trait": "Emotional Regulation",
+    "definition": "The ability to manage and respond to your emotions in a way that fits the situation. It's like having a volume control for your feelings - knowing when to turn them up or down.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You get frustrated more easily than friends when things don't go as planned, but can usually calm yourself down pretty quickly."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "Unexpected changes make you anxious or upset, and you need time alone or specific strategies (deep breathing, listening to music) to regulate."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "You have regular meltdowns or shutdowns when overwhelmed, need a calm-down space at school, and require help identifying and managing your emotions."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Emotional dysregulation happens frequently throughout the day, significantly disrupting school and relationships, and you need consistent support and intervention."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "You experience severe, intense emotional responses multiple times daily that can include aggression or self-harm, requiring intensive behavioral support and crisis intervention."
+      }
+    ]
+  },
+  {
+    "trait": "Social Interaction",
+    "definition": "How you connect, communicate, and build relationships with other people. This includes understanding social cues, making friends, and navigating conversations.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You have friends and can chat with people, but sometimes miss hints or don't know when someone's done talking to you."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "Making friends takes effort, you prefer talking about your interests over small talk, and group conversations can be confusing or exhausting."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "You struggle to start conversations or make friends without support, have trouble with back-and-forth dialogue, and social situations feel stressful and confusing."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Social interactions are very difficult - you rarely initiate them, respond minimally when others approach you, and need significant coaching to engage socially."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "You show very limited interest in or response to social interaction, make unusual approaches only to meet basic needs, and require intensive support to participate socially."
+      }
+    ]
+  },
+  {
+    "trait": "Speech",
+    "definition": "The characteristics of how you use spoken language - including your rhythm, tone, pitch, conversation flow, word choice, and how you express yourself verbally in real-time.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "Your voice sounds a bit monotone or you speak more formally than others, but people understand you fine in conversations."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You repeat favorite phrases, speak with unusual rhythm or pitch, struggle with word-finding, or your speech sounds scripted or robotic at times."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "You use significant echolalia to communicate, have major difficulty with conversation flow and pragmatics (knowing what to say when), and speak in a very flat or odd tone."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Your speech is severely affected by prosody issues, you rely heavily on scripted phrases or immediate echolalia, and expressing spontaneous thoughts verbally is extremely difficult."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "You have minimal functional speech - using only a few scripted words or phrases with severe difficulties in rhythm, tone, and real-time verbal expression."
+      }
+    ]
+  },
+  {
+    "trait": "Sensory Sensitivities",
+    "definition": "Being extra sensitive (hypersensitive) or less sensitive (hyposensitive) to sensory input like sounds, lights, textures, smells, or touch. This is about your tolerance and reactions to specific sensory experiences.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "Some sounds or textures bother you more than they bother others, but it doesn't really affect what you can do."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You avoid tags in clothes, certain foods because of texture, or need to cover your ears during fire drills, but can mostly manage."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "Multiple sensitivities affect your daily life - you can only wear certain fabrics, need sunglasses indoors, avoid crowded places, and plan around sensory triggers."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Severe sensitivities to light, sound, touch, or smell significantly limit activities and locations, cause frequent distress, and require extensive environmental modifications."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "Extreme sensitivities to multiple stimuli make most environments intolerable, you can only function in highly controlled sensory conditions, and exposure causes severe physical distress."
+      }
+    ]
+  },
+  {
+    "trait": "Nonverbal Communication",
+    "definition": "Communication without words - using and understanding body language, facial expressions, gestures, tone of voice, and eye contact.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You make less eye contact than others or your expressions don't always match your feelings, but you get by in conversations."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You have trouble reading facial expressions or tone of voice, and people say your body language seems different or hard to read."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "You rarely use gestures, struggle to interpret others' nonverbal cues, and miss most emotional signals from facial expressions or body language."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "You don't naturally use or understand nonverbal communication - no pointing, minimal facial expressions, avoid eye contact completely, and can't read others' emotions from their faces."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "You show almost no nonverbal communication and cannot interpret any body language, facial expressions, or gestures without explicit verbal explanation."
+      }
+    ]
+  },
+  {
+    "trait": "Perception",
+    "definition": "How your brain interprets what you see, hear, and experience. People with autism often notice details others miss but might process information differently.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You notice small details in patterns or sounds that others miss - like hearing conversations from far away or spotting tiny changes in your environment."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You focus on details and sometimes miss the main point of a story or conversation, or need extra time to process what you're seeing and hearing."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "You process visual and auditory information so differently that noisy environments are overwhelming, you struggle with the 'big picture,' and following fast conversations is very hard."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Your perceptual differences make it difficult to understand complex social scenes, integrate information from different senses, or navigate busy environments safely."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "Severe perceptual processing differences mean you need intensive support to interpret and respond to your environment, with significant challenges understanding what you see and hear."
+      }
+    ]
+  },
+  {
+    "trait": "Executive Functions",
+    "definition": "Mental skills that help you plan, organize, remember instructions, manage time, start tasks, and switch between activities. Like the 'manager' in your brain.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You occasionally forget assignments or lose track of time, but can manage with occasional reminders or a planner."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You need help getting started on tasks, rely on visual schedules and checklists, and find organizing your stuff or managing time pretty challenging."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "You need regular support for planning and organizing, struggle significantly with multi-step tasks, and require structured systems to manage your day."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Executive function difficulties severely limit your independence - you need frequent reminders and assistance for most planning, organization, and task completion."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "You require constant, direct support for all executive tasks - cannot initiate, plan, or organize activities independently and need step-by-step guidance throughout the day."
+      }
+    ]
+  },
+  {
+    "trait": "Intense Interests",
+    "definition": "Having extremely focused interests or hobbies that you're deeply passionate about and can spend hours learning about or doing.",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You have topics you're really into and love discussing them, but can talk about other things when needed."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "Your interests take up a lot of your time and you tend to bring conversations back to your favorite topics, but you can still do homework and other activities."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "Your intense interests dominate much of your day, you get very distressed when interrupted, and balancing them with schoolwork or chores is challenging."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Your interests consume most of your focus, making it very difficult to engage with required activities, and transitions away from them cause significant distress or meltdowns."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "You're so intensely absorbed in your interests that participating in necessary activities (school, self-care, meals) is nearly impossible without intensive intervention and support."
+      }
+    ]
+  },
+  {
+    "trait": "Cognitive Flexibility",
+    "definition": "The ability to adapt your thinking when situations change, switch between tasks, or see things from different perspectives. Sometimes called 'mental flexibility.'",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "Unexpected changes annoy you and you prefer routines, but you can adapt after taking a moment to adjust."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "Changes to plans cause noticeable stress, you need advance warning for transitions, and seeing things from other perspectives takes effort."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "Routine changes cause significant distress, you get stuck on ideas and have trouble shifting, and need structured support to handle unexpected situations."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Changes cause severe anxiety or meltdowns, you require highly predictable routines with extensive preparation for any variations, and thinking flexibly is extremely difficult."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "Even small changes to routines cause extreme distress, you need intensive support to cope with any unpredictability, and rigid thinking patterns dominate how you approach everything."
+      }
+    ]
+  },
+  {
+    "trait": "Repetitive Behaviors",
+    "definition": "Repeated movements, actions, or sounds that help you feel calm, focused, or express emotions. Often called 'stimming' (self-stimulating behaviors).",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "You tap, fidget, or bounce when concentrating or anxious - subtle movements that help you but others barely notice."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You regularly rock, flap your hands, or repeat sounds/phrases - these are noticeable but help you regulate and don't interfere with activities."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "Your repetitive behaviors (pacing, hand-flapping, vocal sounds) are frequent and intense, sometimes making it harder to focus on tasks or causing concern from others."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Repetitive behaviors are constant and difficult to redirect, occasionally including self-injurious actions that require monitoring and intervention strategies."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "Severe, persistent repetitive or self-injurious behaviors occur throughout the day, require continuous supervision for safety, and significantly limit your ability to engage in activities."
+      }
+    ]
+  },
+  {
+    "trait": "Motor Skills/Coordination",
+    "definition": "The ability to control and coordinate your body movements, including both large movements (like running or catching) and small movements (like writing or buttoning).",
+    "intensityLevels": [
+      {
+        "level": 1,
+        "description": "Minimal impact",
+        "example": "Your handwriting is messier than average and you're not the most coordinated at sports, but you manage daily tasks fine."
+      },
+      {
+        "level": 2,
+        "description": "Mild challenges",
+        "example": "You struggle with fine motor tasks like tying shoes or neat handwriting, and activities like catching a ball or riding a bike took you longer to learn."
+      },
+      {
+        "level": 3,
+        "description": "Moderate impact",
+        "example": "Motor challenges affect many tasks - you need extra time for writing, help with buttons and zippers, and have noticeable difficulty with balance and coordination."
+      },
+      {
+        "level": 4,
+        "description": "Substantial challenges",
+        "example": "Significant motor impairments affect most physical activities - you need help with many self-care tasks, have an unsteady gait, and both fine and gross motor tasks are very difficult."
+      },
+      {
+        "level": 5,
+        "description": "Very substantial impact",
+        "example": "Severe motor coordination challenges require extensive support for physical activities including walking, eating, dressing, and maintaining balance, though you can still participate with assistance."
+      }
+    ]
+  }
+]
