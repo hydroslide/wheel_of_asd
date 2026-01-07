@@ -11,7 +11,6 @@
  */
 
 const fs = require('fs');
-const path = require('path');
 
 // File paths
 const TRAITS_JSON_PATH = './references/traits.json';
@@ -30,8 +29,8 @@ function embedTraitsData() {
             throw new Error(`Traits file not found: ${TRAITS_JSON_PATH}`);
         }
 
-        const traitsData = JSON.parse(fs.readFileSync(TRAITS_JSON_PATH, 'utf8'));
-        console.log(`✅ Loaded ${traitsData.length} traits from JSON file`);
+        const traitsDataRaw = JSON.parse(fs.readFileSync(TRAITS_JSON_PATH, 'utf8'));
+        console.log(`✅ Loaded ${traitsDataRaw.length} traits from JSON file`);
 
         console.log('🔄 Reading HTML file...');
 
@@ -41,6 +40,43 @@ function embedTraitsData() {
         }
 
         let htmlContent = fs.readFileSync(HTML_FILE_PATH, 'utf8');
+
+        // Extract WHEEL_LABELS order from HTML file
+        console.log('🔄 Extracting wheel labels order from HTML...');
+        const wheelLabelsMatch = htmlContent.match(/const WHEEL_LABELS = \[([\s\S]*?)\];/);
+        if (!wheelLabelsMatch) {
+            throw new Error('Could not find WHEEL_LABELS array in HTML file');
+        }
+
+        const wheelLabelsText = wheelLabelsMatch[1];
+        const wheelLabels = wheelLabelsText
+            .split(',')
+            .map(label => label.trim().replace(/['"`]/g, ''))
+            .filter(label => label.length > 0);
+
+        console.log(`✅ Found ${wheelLabels.length} wheel labels`);
+        console.log('📋 Wheel order:', wheelLabels.map(label => `"${label}"`).join(', '));
+
+        // Reorder traits data to match WHEEL_LABELS order
+        console.log('🔄 Reordering traits data to match wheel labels...');
+        const traitsData = [];
+        const traitsMap = new Map();
+
+        // Create a map for quick lookup
+        traitsDataRaw.forEach(trait => {
+            traitsMap.set(trait.trait.toUpperCase(), trait);
+        });
+
+        // Reorder according to WHEEL_LABELS
+        wheelLabels.forEach(label => {
+            const trait = traitsMap.get(label);
+            if (!trait) {
+                throw new Error(`Could not find trait data for wheel label: "${label}"`);
+            }
+            traitsData.push(trait);
+        });
+
+        console.log(`✅ Reordered ${traitsData.length} traits to match wheel labels order`);
 
         // Find the start and end markers
         const startIndex = htmlContent.indexOf(START_MARKER);

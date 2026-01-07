@@ -323,20 +323,109 @@
         //     { h: 120, s: 80, l: 50 },  // MOTOR SKILLS/COORDINATION - lime green
         //     { h: 90, s: 70, l: 50 }    // SENSORY PROCESSING - green
         // ];
-        const SLICE_COLORS = [
-            { h: 60, s: 100, l: 50 },  // EMOTIONAL REGULATION - bright yellow
-            { h: 45, s: 80, l: 60 },   // SOCIAL INTERACTION - yellow-orange
-            { h: 25, s: 85, l: 65 },   // SPEECH - orange
-            { h: 0, s: 85, l: 60 },    // SENSORY SENSITIVITIES - red
-            { h: 320, s: 80, l: 60 },  // NONVERBAL COMMUNICATION - magenta
-            { h: 270, s: 70, l: 65 },  // PERCEPTION - purple
-            { h: 250, s: 75, l: 60 },  // EXECUTIVE FUNCTIONS - blue-purple
-            { h: 220, s: 80, l: 55 },  // INTENSE INTERESTS - blue
-            { h: 200, s: 85, l: 60 },  // COGNITIVE FLEXIBILITY - sky blue
-            { h: 175, s: 70, l: 55 },  // REPETITIVE BEHAVIORS - teal
-            { h: 120, s: 80, l: 50 },  // MOTOR SKILLS/COORDINATION - lime green
-            { h: 90, s: 70, l: 50 }    // SENSORY PROCESSING - green
-        ];
+        // Legacy HSL-based color system - replaced with extracted wheel colors
+        // const SLICE_COLORS = [
+        //     { h: 60, s: 100, l: 50 },  // EMOTIONAL REGULATION - bright yellow
+        //     { h: 45, s: 80, l: 60 },   // SOCIAL INTERACTION - yellow-orange
+        //     { h: 25, s: 85, l: 65 },   // SPEECH - orange
+        //     { h: 0, s: 85, l: 60 },    // SENSORY SENSITIVITIES - red
+        //     { h: 320, s: 80, l: 60 },  // NONVERBAL COMMUNICATION - magenta
+        //     { h: 270, s: 70, l: 65 },  // PERCEPTION - purple
+        //     { h: 250, s: 75, l: 60 },  // EXECUTIVE FUNCTIONS - blue-purple
+        //     { h: 220, s: 80, l: 55 },  // INTENSE INTERESTS - blue
+        //     { h: 200, s: 85, l: 60 },  // COGNITIVE FLEXIBILITY - sky blue
+        //     { h: 175, s: 70, l: 55 },  // REPETITIVE BEHAVIORS - teal
+        //     { h: 120, s: 80, l: 50 },  // MOTOR SKILLS/COORDINATION - lime green
+        //     { h: 90, s: 70, l: 50 }    // SENSORY PROCESSING - green
+        // ];
+
+        // Extracted wheel colors from original design (directly sampled from image)
+        const WHEEL_COLORS_SAMPLED = {
+            "Emotional Regulation": {
+                "1": "#fcfcb7",
+                "2": "#fff770",
+                "3": "#fff42a",
+                "4": "#fff000",
+                "5": "#fdd800"
+            },
+            "Social Interaction": {
+                "1": "#fef1b9",
+                "2": "#fde471",
+                "3": "#fdd42a",
+                "4": "#fdc601",
+                "5": "#fbb800"
+            },
+            "Speech": {
+                "1": "#fee1b8",
+                "2": "#fdc071",
+                "3": "#fda229",
+                "4": "#fc8201",
+                "5": "#f94100"
+            },
+            "Sensory Sensitivities": {
+                "1": "#fdceba",
+                "2": "#fba073",
+                "3": "#fa6e2c",
+                "4": "#f73f01",
+                "5": "#f50e00"
+            },
+            "Nonverbal Communication": {
+                "1": "#ffc0bc",
+                "2": "#ff7f72",
+                "3": "#fd4029",
+                "4": "#fe0000",
+                "5": "#fe0000"
+            },
+            "Perception": {
+                "1": "#e5c6e5",
+                "2": "#d08cd0",
+                "3": "#b852b6",
+                "4": "#a3199f",
+                "5": "#8a0187"
+            },
+            "Executive Functions": {
+                "1": "#dbc1e5",
+                "2": "#b684cb",
+                "3": "#9248b0",
+                "4": "#6c0b96",
+                "5": "#57027b"
+            },
+            "Intense Interests": {
+                "1": "#d8cafe",
+                "2": "#b195ff",
+                "3": "#8b62fd",
+                "4": "#652dfe",
+                "5": "#3e00fd"
+            },
+            "Cognitive Flexibility": {
+                "1": "#bdd2ff",
+                "2": "#78a7fe",
+                "3": "#387cff",
+                "4": "#004ffe",
+                "5": "#0023fe"
+            },
+            "Repetitive Behaviors": {
+                "1": "#bedfda",
+                "2": "#7fbfb5",
+                "3": "#3fa091",
+                "4": "#007f6b",
+                "5": "#005f47"
+            },
+            "Motor Skills/Coordination": {
+                "1": "#c3ead0",
+                "2": "#85d59e",
+                "3": "#46c26d",
+                "4": "#0aad3d",
+                "5": "#00980a"
+            },
+            "Sensory Processing": {
+                "1": "#dff7c9",
+                "2": "#bfee91",
+                "3": "#9de75b",
+                "4": "#7cdf25",
+                "5": "#5bd700"
+            }
+        };
 
         // State management
         let wheelState = Array(SLICE_COUNT).fill(0); // All slices start with 0 fill level
@@ -828,6 +917,14 @@
         }
 
         // Color generation functions
+        function normalizeTraitName(label) {
+            // Convert "EMOTIONAL REGULATION" to "Emotional Regulation"
+            // and handle "MOTOR SKILLS/COORDINATION" to "Motor Skills/Coordination"
+            return label
+                .toLowerCase()
+                .replace(/\b\w/g, char => char.toUpperCase());
+        }
+
         function getSegmentColor(sliceIndex, segmentIndex, fillLevel) {
             // If this segment is beyond the fill level, return gradient gray
             if (segmentIndex >= fillLevel) {
@@ -836,25 +933,35 @@
                 return `hsl(0, 0%, ${lightness}%)`;
             }
 
-            const baseColor = SLICE_COLORS[sliceIndex];
+            // Get trait name and normalize for lookup
+            const traitLabel = WHEEL_LABELS[sliceIndex];
+            const traitName = normalizeTraitName(traitLabel);
 
-            // Calculate saturation progression (increases from inner to outer)
-            // Start with high saturation (what was 3rd segment) and scale to full saturation
-            const saturationMultiplier = 0.925 + (segmentIndex * 0.01875); // From 92.5% to 100%
+            // Get intensity level (1-5) from segment index (0-4)
+            const intensityLevel = (segmentIndex + 1).toString();
 
-            // Calculate lightness boost (decreases from inner to outer for pastel effect)
-            const lightnessBoost = (SEGMENT_COUNT - 1 - segmentIndex) * 10; // +40 for innermost, 0 for outermost
+            // Look up color from sampled palette
+            if (WHEEL_COLORS_SAMPLED[traitName] && WHEEL_COLORS_SAMPLED[traitName][intensityLevel]) {
+                return WHEEL_COLORS_SAMPLED[traitName][intensityLevel];
+            }
 
-            const h = baseColor.h;
-            const s = Math.min(100, baseColor.s * saturationMultiplier);
-            const l = Math.max(20, Math.min(95, baseColor.l + lightnessBoost));
-
-            return `hsl(${h}, ${s}%, ${l}%)`;
+            // Fallback to gray if color not found (shouldn't happen)
+            console.warn(`Color not found for ${traitName} level ${intensityLevel}`);
+            return '#999999';
         }
 
         function getOutlineColor(sliceIndex) {
-            const baseColor = SLICE_COLORS[sliceIndex];
-            return `hsl(${baseColor.h}, 100%, 40%)`; // Full saturation, darker
+            // Get trait name and normalize for lookup
+            const traitLabel = WHEEL_LABELS[sliceIndex];
+            const traitName = normalizeTraitName(traitLabel);
+
+            // Use the darkest intensity (level 5) for outline
+            if (WHEEL_COLORS_SAMPLED[traitName] && WHEEL_COLORS_SAMPLED[traitName]["5"]) {
+                return WHEEL_COLORS_SAMPLED[traitName]["5"];
+            }
+
+            // Fallback to black
+            return '#000000';
         }
 
         // Update segment colors based on current state
