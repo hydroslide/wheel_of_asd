@@ -292,21 +292,24 @@
         const SLICE_COUNT = 12;
         const SLICE_ANGLE = (2 * Math.PI) / SLICE_COUNT;
 
-        // Wheel labels (clockwise from top)
-        const WHEEL_LABELS = [
-            'EMOTIONAL REGULATION',
-            'SOCIAL INTERACTION',
-            'SPEECH',
-            'SENSORY SENSITIVITIES',
-            'NONVERBAL COMMUNICATION',
-            'PERCEPTION',
-            'EXECUTIVE FUNCTIONS',
-            'INTENSE INTERESTS',
-            'COGNITIVE FLEXIBILITY',
-            'REPETITIVE BEHAVIORS',
-            'MOTOR SKILLS/COORDINATION',
-            'SENSORY PROCESSING'
+        // Wheel configuration (clockwise from top) - self-describing and order-independent
+        const WHEEL_CONFIG = [
+            { position: 0, traitId: 'emotional-regulation', displayLabel: 'EMOTIONAL REGULATION', normalizedName: 'Emotional Regulation' },
+            { position: 1, traitId: 'social-interaction', displayLabel: 'SOCIAL INTERACTION', normalizedName: 'Social Interaction' },
+            { position: 2, traitId: 'speech', displayLabel: 'SPEECH', normalizedName: 'Speech' },
+            { position: 3, traitId: 'sensory-sensitivities', displayLabel: 'SENSORY SENSITIVITIES', normalizedName: 'Sensory Sensitivities' },
+            { position: 4, traitId: 'nonverbal-communication', displayLabel: 'NONVERBAL COMMUNICATION', normalizedName: 'Nonverbal Communication' },
+            { position: 5, traitId: 'perception', displayLabel: 'PERCEPTION', normalizedName: 'Perception' },
+            { position: 6, traitId: 'executive-functions', displayLabel: 'EXECUTIVE FUNCTIONS', normalizedName: 'Executive Functions' },
+            { position: 7, traitId: 'intense-interests', displayLabel: 'INTENSE INTERESTS', normalizedName: 'Intense Interests' },
+            { position: 8, traitId: 'cognitive-flexibility', displayLabel: 'COGNITIVE FLEXIBILITY', normalizedName: 'Cognitive Flexibility' },
+            { position: 9, traitId: 'repetitive-behaviors', displayLabel: 'REPETITIVE BEHAVIORS', normalizedName: 'Repetitive Behaviors' },
+            { position: 10, traitId: 'motor-skills-coordination', displayLabel: 'MOTOR SKILLS/COORDINATION', normalizedName: 'Motor Skills/Coordination' },
+            { position: 11, traitId: 'sensory-processing', displayLabel: 'SENSORY PROCESSING', normalizedName: 'Sensory Processing' }
         ];
+
+        // Legacy WHEEL_LABELS array for backward compatibility (derived from WHEEL_CONFIG)
+        const WHEEL_LABELS = WHEEL_CONFIG.map(config => config.displayLabel);
 
         // Color palette for each slice (base hues)
         // const SLICE_COLORS = [
@@ -448,35 +451,68 @@
         // <!-- TRAITS_DATA_START -->
         const traitsData = [
           {
+            "trait": "Sensory Processing",
+            "definition": "How your brain organizes and integrates sensory information to help you function, focus, and regulate. This includes seeking out sensory input you need, filtering out distractions, and using sensory experiences to stay alert or calm.",
+            "intensityLevels": [
+              {
+                "level": 1,
+                "description": "Minimal impact",
+                "example": "You might fidget with objects, bounce your leg, chew on pens, or doodle to help you concentrate."
+              },
+              {
+                "level": 2,
+                "description": "Mild challenges",
+                "example": "You need to listen to music, use fidget toys, chew gum, or have background noise to focus, and feel distracted or 'off' without these tools."
+              },
+              {
+                "level": 3,
+                "description": "Moderate impact",
+                "example": "You need regular movement breaks, specific textures to touch or squeeze, background sounds, deep pressure (like tight hugs or weighted blankets), or other sensory input to stay regulated throughout your day."
+              },
+              {
+                "level": 4,
+                "description": "Substantial challenges",
+                "example": "You constantly seek intense sensory input (which may include spinning, jumping, crashing into things, seeking strong smells or textures, or other similar behaviors) and have significant trouble organizing your thoughts or staying focused without it."
+              },
+              {
+                "level": 5,
+                "description": "Very substantial impact",
+                "example": "You need continuous, intensive sensory input and support throughout the day to stay regulated, struggle to integrate information from multiple senses at once, and have severe difficulty functioning without specific sensory experiences."
+              }
+            ],
+            "id": "sensory-processing"
+          },
+          {
             "trait": "Emotional Regulation",
             "definition": "The ability to manage and respond to your emotions in a way that fits the situation. It's like having a volume control for your feelings - knowing when to turn them up or down.",
             "intensityLevels": [
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "You might get frustrated more easily than friends when things don't go as planned, but can usually calm yourself down pretty quickly."
+                "example": "You might get frustrated or upset more easily than friends when things don't go as planned, but can usually calm yourself down fairly quickly."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "Unexpected changes can make you anxious or upset, and you need time alone, deep breathing, listening to music, or other specific strategies to regulate."
+                "example": "Unexpected changes can make you anxious, frustrated, or upset, and you may need time alone, deep breathing, listening to music, going for a walk, or other specific strategies to regulate."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "You have regular meltdowns or shutdowns when overwhelmed, need a calm-down space at school or home, and require help identifying and managing your big emotions."
+                "example": "You have regular meltdowns (which could involve crying, shouting, or pacing) or shutdowns (going quiet and withdrawing), need a calm-down space, and require help identifying and managing your big emotions."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Emotional dysregulation happens frequently throughout the day, significantly disrupting school and relationships, and you need consistent support and intervention strategies to cope."
+                "example": "Emotional dysregulation happens frequently throughout the day (which may include meltdowns, shutdowns, emotional outbursts, extreme silliness, or social withdrawal), significantly disrupting school and relationships, requiring consistent support and intervention strategies."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "You experience severe, intense emotional responses multiple times daily that can include aggression or self-harm, requiring intensive behavioral support and crisis intervention plans."
+                "example": "You experience severe, intense emotional responses multiple times daily that can include aggression, self-harm, prolonged meltdowns, or complete shutdowns, requiring intensive behavioral support and crisis intervention plans."
               }
-            ]
+            ],
+            "id": "emotional-regulation"
           },
           {
             "trait": "Social Interaction",
@@ -485,29 +521,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "You have friends and can chat with people, but might sometimes miss hints, not know when someone's done talking, or struggle with small talk."
+                "example": "You have friends and can chat with people, but might sometimes miss hints, not know when someone's done talking, struggle with small talk, or find group conversations tiring."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "Making friends takes effort, you might prefer talking about your interests over chitchat, and group conversations can be confusing, draining, or overwhelming."
+                "example": "Making friends takes effort, you might prefer talking about your interests, have trouble with turn-taking in conversations, misread social cues, and group conversations can be confusing or draining."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "You struggle to start conversations or make friends without support, have trouble with back-and-forth dialogue or knowing what to say, and social situations feel very stressful and confusing."
+                "example": "You struggle to start conversations or make friends without support, have trouble with back-and-forth dialogue, knowing what to say or when to speak, and social situations feel very stressful and confusing."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Social interactions are very difficult - you rarely initiate them, respond minimally or awkwardly when others approach you, and need significant coaching or scripts to engage socially."
+                "example": "Social interactions are very difficult - you rarely initiate them, respond minimally or in unusual ways when others approach you, have marked difficulty forming relationships, and need significant coaching or scripts to engage socially."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "You show very limited interest in or response to social interaction, make unusual approaches only to meet basic needs (like asking for help), and require intensive support to participate in any social activity."
+                "example": "You show very limited interest in or response to social interaction, make unusual approaches only to meet basic needs (such as requesting help or food), and require intensive support to participate in any social activity."
               }
-            ]
+            ],
+            "id": "social-interaction"
           },
           {
             "trait": "Speech",
@@ -516,60 +553,62 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "Your voice might sound a bit monotone, flat, or overly formal, or you speak with unusual rhythm, but people generally understand you fine in conversations."
+                "example": "Your voice might sound a bit monotone, flat, or overly formal, you may speak with unusual rhythm or pitch, but people generally understand you fine in conversations."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "You repeat favorite phrases, speak with robotic or sing-song rhythm, struggle with word-finding when stressed, use very formal language, or your tone doesn't always match your emotions."
+                "example": "You repeat favorite phrases, speak with robotic or sing-song rhythm, struggle with word-finding when stressed, use very formal or 'scripted' language, have trouble with volume control, or your tone doesn't always match your emotions."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "You use significant echolalia (repeating phrases you've heard), have major difficulty with conversation flow and knowing what to say when, speak in a very flat or unusual tone, or struggle with volume control."
+                "example": "You use echolalia frequently (repeating phrases you've heard), have major difficulty with conversation flow and pragmatics (knowing what to say when), speak in a very flat or unusual tone, struggle with pronouns, or have marked difficulty with spontaneous speech."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Your speech can be severely affected by prosody issues (monotone, odd pitch, or rhythm), you rely heavily on scripted phrases or immediate echolalia, and expressing spontaneous thoughts verbally is extremely difficult."
+                "example": "Your speech is severely affected by prosody issues (monotone, odd pitch, rhythm, or volume), you rely heavily on scripted phrases or immediate echolalia, have very limited conversational ability, and expressing spontaneous thoughts verbally is extremely difficult."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "You have minimal functional speech - using only a few scripted words or phrases with severe difficulties in rhythm, tone, pragmatics, and real-time verbal expression, or you may be nonverbal."
+                "example": "You have minimal functional speech - using only a few scripted words or phrases with severe difficulties in rhythm, tone, pragmatics, and real-time verbal expression, you may be nonverbal, or speech may be limited to immediate echolalia."
               }
-            ]
+            ],
+            "id": "speech"
           },
           {
             "trait": "Sensory Sensitivities",
-            "definition": "Being extra sensitive (hypersensitive) or less sensitive (hyposensitive) to sensory input like sounds, lights, textures, smells, or touch. This is about your tolerance and reactions to specific sensory experiences.",
+            "definition": "Being extra sensitive (hypersensitive) or less sensitive (hyposensitive) to sensory input like sounds, lights, textures, smells, touch, or pain. This is about your tolerance and reactions to specific sensory experiences - you might be oversensitive to some things and undersensitive to others.",
             "intensityLevels": [
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "Some sounds, lights, textures, or smells bother you more than they bother others, but it doesn't really affect what you can do."
+                "example": "Some sounds, lights, textures, smells, or types of touch bother you more than they bother others (or you might not notice some sensations as much), but it doesn't really affect what you can do."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "You avoid tags in clothes, certain food textures, need to cover your ears during fire drills or sirens, wear sunglasses on cloudy days, or can't stand certain smells, but can mostly manage."
+                "example": "You avoid tags in clothes, certain food textures, need to cover your ears during fire drills, wear sunglasses on cloudy days, dislike certain smells, or you might not notice pain, temperature, or hunger as easily as others."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "Multiple sensitivities affect your daily life - you can only wear certain fabrics, need sunglasses indoors, avoid crowded or noisy places, have strong food aversions, and must plan your day around sensory triggers."
+                "example": "Multiple sensitivities affect your daily life - you can only wear certain fabrics, need sunglasses indoors, avoid crowded or noisy places, have strong food aversions, must plan around sensory triggers, or you might seek intense flavors, not notice injuries, or have high pain tolerance for some things but extreme sensitivity to unexpected touch."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Severe sensitivities to light, sound, touch, smell, or taste significantly limit what activities and locations you can handle, cause frequent distress or pain, and require extensive environmental modifications."
+                "example": "Severe sensitivities (which could involve light, sound, touch, smell, taste, pain, or temperature - either over- or under-responsive) significantly limit what activities and locations you can handle, cause frequent distress, and require extensive environmental modifications or constant sensory seeking."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "Extreme sensitivities to multiple stimuli make most environments intolerable or painful, you can only function in highly controlled sensory conditions, and exposure causes severe physical distress or meltdowns."
+                "example": "Extreme sensitivities to multiple stimuli make most environments intolerable or you have severe under-responsiveness (such as not noticing serious pain or injury), you can only function in highly controlled sensory conditions, and exposure causes severe physical distress, meltdowns, or safety concerns."
               }
-            ]
+            ],
+            "id": "sensory-sensitivities"
           },
           {
             "trait": "Nonverbal Communication",
@@ -578,29 +617,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "You make less eye contact than others, your expressions don't always match your feelings, or you use fewer gestures, but you get by in conversations."
+                "example": "You make less eye contact than others, your expressions don't always match your feelings, you use fewer gestures like waving or pointing, but you get by in conversations."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "You have trouble reading facial expressions, understanding tone of voice or sarcasm, using appropriate gestures like waving or pointing, and people say your body language seems different or hard to read."
+                "example": "You have trouble reading facial expressions, understanding tone of voice or sarcasm, using appropriate gestures, and people say your body language seems different, stiff, or hard to read."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "You rarely use gestures naturally, struggle to interpret others' nonverbal cues (like crossed arms or eye-rolling), miss most emotional signals from faces or body language, and avoid eye contact."
+                "example": "You rarely use gestures naturally, struggle to interpret others' nonverbal cues (such as crossed arms, eye-rolling, or facial expressions), miss most emotional signals, and avoid or have difficulty with eye contact."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "You don't naturally use or understand nonverbal communication - minimal pointing or gesturing, very limited facial expressions, avoid eye contact almost entirely, and can't read others' emotions from their faces or body language."
+                "example": "You don't naturally use or understand nonverbal communication - minimal pointing or gesturing, very limited facial expressions, avoid eye contact almost entirely, and can't read others' emotions from their faces, tone, or body language."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
                 "example": "You show almost no nonverbal communication (no gestures, pointing, or expressive facial expressions) and cannot interpret any body language, facial expressions, tone, or gestures without explicit verbal explanation."
               }
-            ]
+            ],
+            "id": "nonverbal-communication"
           },
           {
             "trait": "Perception",
@@ -609,29 +649,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "You notice small details in patterns, sounds, or your environment that others miss - like a tiny spot on the wall or distant background noises."
+                "example": "You notice small details in patterns, sounds, textures, or your environment that others miss - like tiny spots, distant noises, or subtle patterns."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "You focus on details and sometimes miss the main point of a story or conversation, or need extra time to process what you're seeing, hearing, or reading."
+                "example": "You focus on details and sometimes miss the main point of stories or conversations, need extra time to process what you're seeing, hearing, or reading, or have trouble filtering background noise."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "You process visual and auditory information differently enough that noisy environments are very overwhelming, you struggle with getting the 'big picture,' following fast conversations can be very hard, or you have trouble integrating what you see and hear."
+                "example": "You process visual and auditory information differently enough that noisy environments are very overwhelming, you struggle with understanding the 'big picture,' following fast conversations can be very hard, or you have trouble integrating what you see and hear simultaneously."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Your perceptual differences make it difficult to understand complex social scenes, integrate information from different senses simultaneously, filter out background noise or movement, or navigate busy environments safely."
+                "example": "Your perceptual differences make it difficult to understand complex social scenes, integrate information from different senses at once, filter out background stimuli, track moving objects, or navigate busy environments safely."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "Severe perceptual processing differences mean you need intensive support to interpret and respond to your environment, with significant challenges understanding or organizing what you see, hear, and experience around you."
+                "example": "Severe perceptual processing differences mean you need intensive support to interpret and respond to your environment, with significant challenges understanding, organizing, or making sense of what you see, hear, and experience around you."
               }
-            ]
+            ],
+            "id": "perception"
           },
           {
             "trait": "Executive Functions",
@@ -640,29 +681,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "You occasionally forget assignments, lose track of time, misplace things, or procrastinate, but can manage with occasional reminders or a planner."
+                "example": "You occasionally forget assignments, lose track of time, misplace things, or procrastinate, but can manage with occasional reminders, timers, or a planner."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "You need help getting started on tasks, rely on visual schedules and checklists, struggle with time management or prioritizing, and find organizing your stuff or breaking down big projects pretty challenging."
+                "example": "You need help getting started on tasks, rely on visual schedules and checklists, struggle with time management or prioritizing what to do first, and find organizing your belongings or breaking down big projects challenging."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "You need regular support for planning and organizing, struggle significantly with multi-step tasks or working memory, have trouble initiating activities without prompts, and require structured systems to manage your day."
+                "example": "You need regular support for planning and organizing, struggle significantly with multi-step tasks, working memory (holding information in your mind), task initiation (just starting things), and require structured systems and frequent reminders to manage your day."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Executive function difficulties severely limit your independence - you need frequent reminders and assistance for most planning, organization, task initiation, time management, and task completion, even with supports in place."
+                "example": "Executive function difficulties severely limit your independence - you need frequent reminders and hands-on assistance for most planning, organization, task initiation, time management, switching between activities, and task completion, even with supports in place."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "You require constant, direct support for all executive tasks - cannot initiate, plan, sequence steps, or organize activities independently and need step-by-step guidance and monitoring throughout the day."
+                "example": "You require constant, direct support for all executive tasks - cannot initiate, plan, sequence steps, organize activities, or manage time independently and need step-by-step guidance and continuous monitoring throughout the day."
               }
-            ]
+            ],
+            "id": "executive-functions"
           },
           {
             "trait": "Intense Interests",
@@ -671,29 +713,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "You have topics or hobbies you're really into and love discussing them, but can talk about other things or do other activities when needed."
+                "example": "You have topics, hobbies, or activities you're really into and love discussing or doing them, but can talk about other things or do other activities when needed."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "Your interests take up a lot of your free time, you tend to bring conversations back to your favorite topics or share lots of facts about them, but you can still do homework and other required activities."
+                "example": "Your interests take up a lot of your free time, you tend to bring conversations back to your favorite topics or share lots of detailed facts about them, but you can still do homework and other required activities."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "Your intense interests dominate much of your day and thoughts, you get very distressed or upset when interrupted or prevented from engaging with them, and balancing them with schoolwork or chores can be challenging."
+                "example": "Your intense interests dominate much of your day and thoughts, you get very distressed, frustrated, or upset when interrupted or prevented from engaging with them, and balancing them with schoolwork, chores, or social time can be challenging."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Your interests consume most of your focus and mental energy, making it very difficult to engage with required activities (like school or chores), and transitions away from them cause significant distress, meltdowns, or refusal."
+                "example": "Your interests consume most of your focus and mental energy, making it very difficult to engage with required activities (such as completing schoolwork, chores, or social obligations), and transitions away from them cause significant distress, meltdowns, or refusal."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "You're so intensely absorbed in your interests that participating in necessary activities (school, self-care, meals, social time) is nearly impossible without intensive intervention, redirection, and structured support throughout the day."
+                "example": "You're so intensely absorbed in your interests that participating in necessary daily activities (including school, self-care, meals, or social time) is nearly impossible without intensive intervention, redirection, and structured support throughout the day."
               }
-            ]
+            ],
+            "id": "intense-interests"
           },
           {
             "trait": "Cognitive Flexibility",
@@ -702,29 +745,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "Unexpected changes annoy you and you prefer routines or knowing the plan, but you can adapt after taking a moment to mentally adjust."
+                "example": "Unexpected changes annoy or bother you and you prefer routines or knowing the plan ahead of time, but you can adapt after taking a moment to mentally adjust."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "Changes to plans cause noticeable stress or frustration, you need advance warning for transitions, you might get stuck on certain ideas, and seeing things from other perspectives takes real effort."
+                "example": "Changes to plans cause noticeable stress, frustration, or anxiety, you need advance warning for transitions, you might get stuck on certain ideas or ways of doing things, and seeing things from other perspectives takes real effort."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "Routine changes cause significant distress or anxiety, you get stuck on ideas and have serious trouble shifting your thinking, switching tasks can be very hard, and you need structured support to handle unexpected situations."
+                "example": "Routine changes cause significant distress or anxiety, you get stuck on ideas and have serious trouble shifting your thinking or considering alternatives, switching tasks can be very difficult, and you need structured support to handle unexpected situations."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Changes cause severe anxiety, meltdowns, or shutdowns, you require highly predictable routines with extensive preparation for any variations, thinking flexibly or seeing alternatives is extremely difficult, and you often revert to familiar patterns."
+                "example": "Changes cause severe anxiety, meltdowns, or shutdowns, you require highly predictable routines with extensive preparation for any variations, thinking flexibly or seeing alternatives is extremely difficult, and you strongly revert to familiar patterns even when they don't work."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "Even small changes to routines cause extreme distress or crisis-level reactions, you need intensive support to cope with any unpredictability, rigid thinking patterns dominate how you approach everything, and adapting is nearly impossible."
+                "example": "Even small changes to routines cause extreme distress or crisis-level reactions, you need intensive support to cope with any unpredictability, rigid thinking patterns dominate how you approach everything, and adapting to change is nearly impossible even with extensive preparation."
               }
-            ]
+            ],
+            "id": "cognitive-flexibility"
           },
           {
             "trait": "Repetitive Behaviors",
@@ -733,29 +777,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "You tap, fidget, twist your hair, bite your nails, or bounce when concentrating or anxious - subtle movements that help you but others barely notice."
+                "example": "You tap, fidget, twist hair, bite nails, bounce, hum, or engage in other subtle repetitive movements when concentrating, bored, anxious, or excited - behaviors that help you but others barely notice."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "You regularly rock, flap your hands, hum, repeat sounds or phrases, or engage in other noticeable stims - these help you regulate and don't interfere with your activities or cause harm."
+                "example": "You regularly rock, flap your hands, make vocal sounds, repeat phrases, squeeze objects, or engage in other noticeable stims - these help you regulate, express emotions, and don't interfere with activities or cause harm."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "Your repetitive behaviors (such as pacing, hand-flapping, vocal sounds, rubbing textures, or spinning) are frequent and intense, sometimes making it harder to focus on tasks or causing concern from others."
+                "example": "Your repetitive behaviors (which may include pacing, hand-flapping, rocking, vocal sounds, rubbing or scratching skin, spinning, or other similar actions) are frequent and intense, sometimes making it harder to focus on other tasks or causing concern from others."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Repetitive behaviors are constant and difficult to redirect (such as prolonged rocking, intense hand movements, loud vocalizations, or body tensing), occasionally including self-injurious actions that require monitoring and intervention strategies."
+                "example": "Repetitive behaviors are constant and difficult to redirect (such as prolonged rocking, intense hand movements, loud vocalizations, body tensing, or repetitive scratching), occasionally including self-injurious actions (like picking, hitting, or biting) that require monitoring and intervention strategies."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "Severe, persistent repetitive behaviors (which could include head-banging, aggressive biting, intense spinning, or other self-injury) occur throughout the day, require continuous supervision for safety, and significantly limit your ability to engage in learning or daily activities."
+                "example": "Severe, persistent repetitive behaviors (which could include head-banging, intense biting, aggressive scratching or picking, prolonged body movements, or other self-injury) occur throughout the day, require continuous supervision for safety, and significantly limit your ability to engage in learning or daily activities."
               }
-            ]
+            ],
+            "id": "repetitive-behaviors"
           },
           {
             "trait": "Motor Skills/Coordination",
@@ -764,60 +809,30 @@
               {
                 "level": 1,
                 "description": "Minimal impact",
-                "example": "Your handwriting is messier than average, you're not the most coordinated at sports or physical activities, but you manage daily tasks fine."
+                "example": "Your handwriting is messier than average, you're not the most coordinated at sports, you might be described as 'clumsy,' but you manage daily tasks fine."
               },
               {
                 "level": 2,
                 "description": "Mild challenges",
-                "example": "You struggle with fine motor tasks like tying shoes, buttoning, or neat handwriting, and activities like catching a ball, riding a bike, or cutting with scissors took you longer to learn or are still difficult."
+                "example": "You struggle with fine motor tasks (such as tying shoes, buttoning, using scissors, or neat handwriting), and activities like catching a ball, riding a bike, or learning to swim took you longer to learn or are still difficult."
               },
               {
                 "level": 3,
                 "description": "Moderate impact",
-                "example": "Motor challenges affect many tasks - you need extra time or adaptive tools for writing, help with buttons and zippers or shoe-tying, and have noticeable difficulty with balance, coordination, or motor planning."
+                "example": "Motor challenges affect many tasks - you need extra time or adaptive tools for writing, help with fasteners (buttons, zippers, shoe-tying), and have noticeable difficulty with balance, coordination, spatial awareness, or motor planning."
               },
               {
                 "level": 4,
                 "description": "Substantial challenges",
-                "example": "Significant motor impairments affect most physical activities - you need help with many self-care tasks (dressing, eating with utensils, grooming), have an unsteady gait or poor balance, and both fine and gross motor tasks are very difficult."
+                "example": "Significant motor impairments affect most physical activities - you need help with many self-care tasks (such as dressing, eating with utensils, grooming, or bathing), have an unsteady gait or poor balance, and both fine and gross motor tasks are very difficult."
               },
               {
                 "level": 5,
                 "description": "Very substantial impact",
-                "example": "Severe motor coordination challenges require extensive support for most physical activities including walking safely, eating independently, dressing yourself, and maintaining balance or posture, though you can still participate with hands-on assistance."
+                "example": "Severe motor coordination challenges require extensive hands-on support for most physical activities (which may include walking safely, eating independently, dressing yourself, maintaining balance or posture, or coordinating movements), though you can still participate with direct assistance."
               }
-            ]
-          },
-          {
-            "trait": "Sensory Processing",
-            "definition": "How your brain organizes and integrates sensory information to help you function, focus, and regulate. This includes seeking out sensory input you need, filtering out distractions, and using sensory experiences to stay alert or calm.",
-            "intensityLevels": [
-              {
-                "level": 1,
-                "description": "Minimal impact",
-                "example": "You might fidget with a pen, bounce your leg, or chew gum to help you concentrate - just like many people do."
-              },
-              {
-                "level": 2,
-                "description": "Mild challenges",
-                "example": "You need to listen to music, use a fidget toy, doodle, or chew on something to focus in class, and feel distracted or 'off' without these tools."
-              },
-              {
-                "level": 3,
-                "description": "Moderate impact",
-                "example": "You need regular movement breaks, specific textures to touch or squeeze, background sounds or music, or deep pressure to stay regulated and focused throughout your day."
-              },
-              {
-                "level": 4,
-                "description": "Substantial challenges",
-                "example": "You constantly seek intense sensory input (such as spinning, jumping, crashing into things, or seeking strong smells or textures) and have significant trouble organizing your thoughts or staying focused without it."
-              },
-              {
-                "level": 5,
-                "description": "Very substantial impact",
-                "example": "You need continuous, intensive sensory input and support throughout the day to stay regulated, struggle to integrate information from multiple senses at once, and have severe difficulty functioning without specific sensory experiences."
-              }
-            ]
+            ],
+            "id": "motor-skills-coordination"
           }
         ];
         // <!-- TRAITS_DATA_END -->
@@ -933,9 +948,14 @@
                 return `hsl(0, 0%, ${lightness}%)`;
             }
 
-            // Get trait name and normalize for lookup
-            const traitLabel = WHEEL_LABELS[sliceIndex];
-            const traitName = normalizeTraitName(traitLabel);
+            // Get trait name directly from wheel configuration
+            if (sliceIndex < 0 || sliceIndex >= WHEEL_CONFIG.length) {
+                console.error(`Invalid slice index for color lookup: ${sliceIndex}`);
+                return '#999999';
+            }
+
+            const config = WHEEL_CONFIG[sliceIndex];
+            const traitName = config.normalizedName;
 
             // Get intensity level (1-5) from segment index (0-4)
             const intensityLevel = (segmentIndex + 1).toString();
@@ -946,14 +966,19 @@
             }
 
             // Fallback to gray if color not found (shouldn't happen)
-            console.warn(`Color not found for ${traitName} level ${intensityLevel}`);
+            console.warn(`Color not found for trait '${traitName}' level ${intensityLevel} (slice ${sliceIndex})`);
             return '#999999';
         }
 
         function getOutlineColor(sliceIndex) {
-            // Get trait name and normalize for lookup
-            const traitLabel = WHEEL_LABELS[sliceIndex];
-            const traitName = normalizeTraitName(traitLabel);
+            // Get trait name directly from wheel configuration
+            if (sliceIndex < 0 || sliceIndex >= WHEEL_CONFIG.length) {
+                console.error(`Invalid slice index for outline color: ${sliceIndex}`);
+                return '#000000';
+            }
+
+            const config = WHEEL_CONFIG[sliceIndex];
+            const traitName = config.normalizedName;
 
             // Use the darkest intensity (level 5) for outline
             if (WHEEL_COLORS_SAMPLED[traitName] && WHEEL_COLORS_SAMPLED[traitName]["5"]) {
@@ -961,6 +986,7 @@
             }
 
             // Fallback to black
+            console.warn(`Outline color not found for trait '${traitName}' (slice ${sliceIndex})`);
             return '#000000';
         }
 
@@ -987,20 +1013,112 @@
             });
         }
 
-        // Helper functions for traits data
+        // Helper functions for traits data - ID-based lookup system
 
-        function getTraitData(sliceIndex) {
-            if (!traitsData || sliceIndex < 0 || sliceIndex >= traitsData.length) {
-                return null;
+        // Global traits map for fast lookups
+        let traitsMap = new Map();
+
+        // Build the traits lookup map from the embedded data
+        function buildTraitsMap() {
+            traitsMap.clear();
+            if (!traitsData) {
+                console.error('No traits data available for mapping');
+                return;
             }
-            return traitsData[sliceIndex];
+
+            traitsData.forEach(trait => {
+                if (trait.id) {
+                    traitsMap.set(trait.id, trait);
+                } else {
+                    console.warn('Trait missing ID:', trait.trait || 'Unknown trait');
+                }
+            });
+
+            console.log(`✅ Built traits map with ${traitsMap.size} traits`);
         }
 
-        function getLevelData(sliceIndex, segmentIndex) {
-            const trait = getTraitData(sliceIndex);
-            if (!trait || segmentIndex < 0 || segmentIndex >= 5) {
+        // Validate that wheel configuration matches available trait data
+        function validateWheelConfiguration() {
+            const errors = [];
+
+            if (!WHEEL_CONFIG || WHEEL_CONFIG.length === 0) {
+                errors.push('WHEEL_CONFIG is empty or undefined');
+                return errors;
+            }
+
+            if (!traitsMap || traitsMap.size === 0) {
+                errors.push('Traits map is empty - call buildTraitsMap() first');
+                return errors;
+            }
+
+            WHEEL_CONFIG.forEach((config, index) => {
+                // Check required fields
+                if (typeof config.position !== 'number') {
+                    errors.push(`Position ${index}: missing or invalid position field`);
+                }
+                if (!config.traitId) {
+                    errors.push(`Position ${index}: missing traitId`);
+                }
+                if (!config.displayLabel) {
+                    errors.push(`Position ${index}: missing displayLabel`);
+                }
+                if (!config.normalizedName) {
+                    errors.push(`Position ${index}: missing normalizedName`);
+                }
+
+                // Check that trait data exists
+                if (config.traitId && !traitsMap.has(config.traitId)) {
+                    errors.push(`Position ${index}: trait '${config.traitId}' not found in trait data`);
+                }
+
+                // Check that position matches index
+                if (config.position !== index) {
+                    errors.push(`Position ${index}: position field (${config.position}) doesn't match array index (${index})`);
+                }
+            });
+
+            return errors;
+        }
+
+        // Get trait data by slice index (with validation and error handling)
+        function getTraitData(sliceIndex) {
+            if (sliceIndex < 0 || sliceIndex >= WHEEL_CONFIG.length) {
+                console.error(`Invalid slice index: ${sliceIndex} (valid range: 0-${WHEEL_CONFIG.length - 1})`);
                 return null;
             }
+
+            const config = WHEEL_CONFIG[sliceIndex];
+            if (!config) {
+                console.error(`No wheel configuration for slice ${sliceIndex}`);
+                return null;
+            }
+
+            const trait = traitsMap.get(config.traitId);
+            if (!trait) {
+                console.error(`Missing trait data for ID '${config.traitId}' at position ${sliceIndex}`);
+                return null;
+            }
+
+            return trait;
+        }
+
+        // Get specific level data (with validation)
+        function getLevelData(sliceIndex, segmentIndex) {
+            const trait = getTraitData(sliceIndex);
+            if (!trait) {
+                return null;
+            }
+
+            if (segmentIndex < 0 || segmentIndex >= 5) {
+                console.error(`Invalid segment index: ${segmentIndex} (valid range: 0-4)`);
+                return null;
+            }
+
+            if (!trait.intensityLevels || !trait.intensityLevels[segmentIndex]) {
+                console.error(`Missing intensity level ${segmentIndex} for trait '${trait.trait}'`);
+                return null;
+            }
+
             return trait.intensityLevels[segmentIndex];
         }
 
@@ -1603,27 +1721,70 @@
 
         // Initialize the wheel
         function initWheel() {
-            console.log('Initializing wheel...');
+            console.log('🚀 Initializing autism wheel...');
 
-            // Detect device capabilities
-            detectDeviceCapabilities();
+            try {
+                // Step 1: Build traits lookup map from embedded data
+                buildTraitsMap();
 
-            // Initialize mobile info panel elements
-            mobileInfoHeader = document.getElementById('mobile-info-header');
-            mobileInfoContent = document.getElementById('mobile-info-content');
+                // Step 2: Validate wheel configuration against trait data
+                const validationErrors = validateWheelConfiguration();
+                if (validationErrors.length > 0) {
+                    console.error('❌ Wheel configuration validation failed:');
+                    validationErrors.forEach(error => console.error(`  - ${error}`));
+                    throw new Error(`Invalid wheel configuration: ${validationErrors.length} errors found`);
+                }
+                console.log('✅ Wheel configuration validated successfully');
 
-            // Generate wheel components
-            generateWheelSlices();
-            generateWheelLabels();
-            updateWheelColors();
-            setupInteractivity();
+                // Step 3: Detect device capabilities
+                detectDeviceCapabilities();
 
-            // Initialize tooltip system
-            tooltip = document.getElementById('trait-tooltip');
-            setupTooltips();
+                // Step 4: Initialize mobile info panel elements
+                mobileInfoHeader = document.getElementById('mobile-info-header');
+                mobileInfoContent = document.getElementById('mobile-info-content');
 
-            console.log('Wheel complete with interactivity and tooltips');
-            console.log('Mobile mode:', isMobileDevice, 'Touch device:', isTouchDevice);
+                // Step 5: Generate wheel components
+                generateWheelSlices();
+                generateWheelLabels();
+                updateWheelColors();
+                setupInteractivity();
+
+                // Step 6: Initialize tooltip system
+                tooltip = document.getElementById('trait-tooltip');
+                setupTooltips();
+
+                console.log('✅ Wheel initialization complete!');
+                console.log(`📱 Mobile mode: ${isMobileDevice}, Touch device: ${isTouchDevice}`);
+                console.log(`🎯 Ready with ${traitsMap.size} traits and ${WHEEL_CONFIG.length} wheel positions`);
+
+            } catch (error) {
+                console.error('💥 Failed to initialize wheel:', error.message);
+
+                // Show error to user in the mobile info panel or create an error message
+                if (mobileInfoHeader && mobileInfoContent) {
+                    mobileInfoHeader.textContent = 'Configuration Error';
+                    mobileInfoContent.textContent = `Unable to load wheel: ${error.message}. Please check the browser console for details.`;
+                } else {
+                    // Fallback: show error in the SVG area
+                    const svg = document.getElementById('autism-wheel');
+                    if (svg) {
+                        svg.innerHTML = `
+                            <text x="350" y="300" text-anchor="middle" fill="red" font-size="16" font-weight="bold">
+                                Configuration Error
+                            </text>
+                            <text x="350" y="350" text-anchor="middle" fill="red" font-size="14">
+                                Unable to load wheel data
+                            </text>
+                            <text x="350" y="380" text-anchor="middle" fill="red" font-size="12">
+                                Check browser console for details
+                            </text>
+                        `;
+                    }
+                }
+
+                // Re-throw to prevent further execution
+                throw error;
+            }
         }
 
         // Initialize when page loads

@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * Embed Traits Data Script
+ * Embed Traits Data Script (Order-Independent)
  *
  * This script reads the traits.json file and embeds the data directly into the HTML file,
  * replacing the existing embedded data. This solves CORS issues when opening the HTML
  * file directly in a browser.
+ *
+ * The script validates that all trait IDs referenced in WHEEL_CONFIG exist in the JSON data,
+ * but does NOT reorder the data - the wheel uses ID-based lookups for robustness.
  *
  * Usage: node embed-traits.js
  */
@@ -41,42 +44,65 @@ function embedTraitsData() {
 
         let htmlContent = fs.readFileSync(HTML_FILE_PATH, 'utf8');
 
-        // Extract WHEEL_LABELS order from HTML file
-        console.log('🔄 Extracting wheel labels order from HTML...');
-        const wheelLabelsMatch = htmlContent.match(/const WHEEL_LABELS = \[([\s\S]*?)\];/);
-        if (!wheelLabelsMatch) {
-            throw new Error('Could not find WHEEL_LABELS array in HTML file');
+        // Extract WHEEL_CONFIG trait IDs from HTML file
+        console.log('🔄 Extracting wheel configuration from HTML...');
+        const wheelConfigMatch = htmlContent.match(/const WHEEL_CONFIG = \[([\s\S]*?)\];/);
+        if (!wheelConfigMatch) {
+            throw new Error('Could not find WHEEL_CONFIG array in HTML file');
         }
 
-        const wheelLabelsText = wheelLabelsMatch[1];
-        const wheelLabels = wheelLabelsText
-            .split(',')
-            .map(label => label.trim().replace(/['"`]/g, ''))
-            .filter(label => label.length > 0);
+        // Parse the WHEEL_CONFIG to extract trait IDs
+        const wheelConfigText = wheelConfigMatch[1];
+        const traitIdMatches = wheelConfigText.match(/traitId: '([^']+)'/g);
+        if (!traitIdMatches) {
+            throw new Error('Could not extract trait IDs from WHEEL_CONFIG');
+        }
 
-        console.log(`✅ Found ${wheelLabels.length} wheel labels`);
-        console.log('📋 Wheel order:', wheelLabels.map(label => `"${label}"`).join(', '));
+        const requiredTraitIds = traitIdMatches.map(match =>
+            match.replace(/traitId: '([^']+)'/, '$1')
+        );
 
-        // Reorder traits data to match WHEEL_LABELS order
-        console.log('🔄 Reordering traits data to match wheel labels...');
-        const traitsData = [];
+        console.log(`✅ Found ${requiredTraitIds.length} trait IDs in wheel configuration`);
+        console.log('🔧 Required trait IDs:', requiredTraitIds.map(id => `"${id}"`).join(', '));
+
+        // Validate that all required trait IDs exist in the data (ORDER INDEPENDENT!)
+        console.log('🔄 Validating trait data completeness...');
+        const availableTraitIds = new Set();
         const traitsMap = new Map();
 
-        // Create a map for quick lookup
+        // Build lookup maps - auto-generate IDs from trait names
         traitsDataRaw.forEach(trait => {
-            traitsMap.set(trait.trait.toUpperCase(), trait);
+            // Generate ID from trait name (convert to kebab-case)
+            const generatedId = trait.trait
+                .toLowerCase()
+                .replace(/[\/\s]+/g, '-')  // Replace spaces and slashes with dashes
+                .replace(/[^a-z0-9-]/g, '') // Remove any other special characters
+                .replace(/-+/g, '-')        // Collapse multiple dashes
+                .replace(/^-|-$/g, '');     // Remove leading/trailing dashes
+
+            // Add the generated ID to the trait data for embedding
+            trait.id = generatedId;
+
+            availableTraitIds.add(generatedId);
+            traitsMap.set(generatedId, trait);
+
+            console.log(`✅ Generated ID "${generatedId}" for trait "${trait.trait}"`);
         });
 
-        // Reorder according to WHEEL_LABELS
-        wheelLabels.forEach(label => {
-            const trait = traitsMap.get(label);
-            if (!trait) {
-                throw new Error(`Could not find trait data for wheel label: "${label}"`);
-            }
-            traitsData.push(trait);
-        });
+        // Check for missing traits
+        const missingTraitIds = requiredTraitIds.filter(id => !availableTraitIds.has(id));
+        if (missingTraitIds.length > 0) {
+            throw new Error(`Missing trait data for IDs: ${missingTraitIds.map(id => `"${id}"`).join(', ')}`);
+        }
 
-        console.log(`✅ Reordered ${traitsData.length} traits to match wheel labels order`);
+        // Check for extra traits (not required, just informational)
+        const extraTraitIds = Array.from(availableTraitIds).filter(id => !requiredTraitIds.includes(id));
+        if (extraTraitIds.length > 0) {
+            console.log('ℹ️  Extra traits (not used by wheel):', extraTraitIds.map(id => `"${id}"`).join(', '));
+        }
+
+        console.log(`✅ All ${requiredTraitIds.length} required traits found in data`);
+        console.log('🎯 Order-independent validation complete - no reordering needed!');
 
         // Find the start and end markers
         const startIndex = htmlContent.indexOf(START_MARKER);
@@ -92,9 +118,9 @@ function embedTraitsData() {
 
         console.log('🔄 Embedding traits data...');
 
-        // Create the new embedded data section
+        // Create the new embedded data section (using original order - no reordering needed!)
         const indentation = '        '; // 8 spaces to match existing indentation
-        const formattedTraitsData = JSON.stringify(traitsData, null, 2)
+        const formattedTraitsData = JSON.stringify(traitsDataRaw, null, 2)
             .split('\n')
             .map((line, index) => {
                 // First line doesn't need extra indentation
@@ -119,7 +145,8 @@ function embedTraitsData() {
 
         console.log('✅ Successfully embedded traits data into HTML file');
         console.log('📄 Updated file:', HTML_FILE_PATH);
-        console.log('🎯 Tooltips should now work when opening the HTML file directly in a browser');
+        console.log('🎯 Order-independent embedding complete - wheel will use ID-based lookups');
+        console.log('🌐 Tooltips should now work when opening the HTML file directly in a browser');
 
     } catch (error) {
         console.error('❌ Error:', error.message);
