@@ -7,13 +7,20 @@
     <style>
         body {
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #F7F7F7;
             font-family: Arial, sans-serif;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scrolling on mobile */
+        }
+
+        /* Desktop layout - center everything */
+        .app-container {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            padding: 20px;
         }
 
         .wheel-container {
@@ -26,6 +33,116 @@
         #autism-wheel {
             display: block;
             margin: 0 auto;
+            width: 700px;
+            height: 700px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Mobile info panel - initially hidden */
+        .mobile-info-panel {
+            display: none;
+            background: white;
+            border-top: 2px solid #ddd;
+            padding: 20px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.15);
+            overflow-y: auto;
+        }
+
+        .mobile-info-header {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #222;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        .mobile-info-content {
+            color: #444;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        /* Mobile layout - 67%/33% split */
+        @media (max-width: 768px) {
+            body {
+                overflow: hidden;
+            }
+
+            .app-container {
+                flex-direction: column;
+                height: 100vh;
+                padding: 0;
+            }
+
+            .wheel-section {
+                flex: 2;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+                overflow: hidden;
+            }
+
+            .wheel-container {
+                padding: 10px;
+                box-shadow: none;
+                border-radius: 0;
+                background-color: transparent;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            #autism-wheel {
+                width: 90vw;
+                height: 90vw;
+                max-width: 400px;
+                max-height: 400px;
+            }
+
+            .mobile-info-panel {
+                display: block;
+                flex: 1;
+                min-height: 0; /* Allow flexbox shrinking */
+            }
+
+            /* Hide desktop tooltips on mobile */
+            .tooltip {
+                display: none !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wheel-section {
+                padding: 5px;
+            }
+
+            .wheel-container {
+                padding: 5px;
+            }
+
+            #autism-wheel {
+                width: 95vw;
+                height: 95vw;
+                max-width: 350px;
+                max-height: 350px;
+            }
+
+            .mobile-info-panel {
+                padding: 15px;
+            }
+
+            .mobile-info-header {
+                font-size: 15px;
+            }
+
+            .mobile-info-content {
+                font-size: 13px;
+            }
         }
 
         .wheel-label {
@@ -35,6 +152,19 @@
             dominant-baseline: central;
             fill: #000;
             user-select: none;
+        }
+
+        /* Responsive label font sizes for better mobile readability */
+        @media (max-width: 768px) {
+            .wheel-label {
+                font-size: 18px; /* 29% larger for mobile devices */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wheel-label {
+                font-size: 16px; /* Slightly smaller for very small screens */
+            }
         }
 
         .wheel-segment {
@@ -49,6 +179,20 @@
 
         .wheel-segment:hover {
             stroke-width: 4;
+        }
+
+        /* Touch feedback for mobile */
+        .wheel-segment.touch-active {
+            stroke-width: 6;
+            opacity: 0.9;
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 768px) {
+            /* Disable hover effects on mobile */
+            .wheel-segment:hover {
+                stroke-width: 2;
+            }
         }
 
         .wheel-outline {
@@ -95,7 +239,7 @@
         }
 
 
-        /* Responsive tooltip adjustments */
+        /* Legacy responsive tooltip adjustments (will be hidden on mobile anyway) */
         @media (max-width: 768px) {
             .tooltip {
                 max-width: 320px;
@@ -113,13 +257,27 @@
     </style>
 </head>
 <body>
-    <div class="wheel-container">
-        <svg id="autism-wheel" width="700" height="700" viewBox="0 0 700 700">
-            <!-- Wheel segments will be generated here -->
-        </svg>
+    <div class="app-container">
+        <div class="wheel-section">
+            <div class="wheel-container">
+                <svg id="autism-wheel" width="700" height="700" viewBox="0 0 700 700">
+                    <!-- Wheel segments will be generated here -->
+                </svg>
+            </div>
+        </div>
+
+        <!-- Mobile Info Panel -->
+        <div class="mobile-info-panel" id="mobile-info-panel">
+            <div class="mobile-info-header" id="mobile-info-header">
+                Touch any part of the wheel to explore traits and levels
+            </div>
+            <div class="mobile-info-content" id="mobile-info-content">
+                Drag your finger across the wheel to see different trait descriptions and intensity levels. The wheel shows 12 different autism traits, each with 5 intensity levels from minimal to substantial impact.
+            </div>
+        </div>
     </div>
 
-    <!-- Tooltip Element -->
+    <!-- Desktop Tooltip Element -->
     <div id="trait-tooltip" class="tooltip">
         <div class="tooltip-header"></div>
         <div class="tooltip-content"></div>
@@ -185,6 +343,13 @@
         let isDragging = false;
         let currentSlice = -1;
         let hoveredSlice = -1;
+
+        // Device detection and touch state
+        let isTouchDevice = false;
+        let isMobileDevice = false;
+        let touchActive = false;
+        let mobileInfoHeader = null;
+        let mobileInfoContent = null;
 
         // Tooltip system
         let tooltip = null;
@@ -568,6 +733,100 @@
         ];
         // <!-- TRAITS_DATA_END -->
 
+        // Device detection functions
+        function detectDeviceCapabilities() {
+            // Detect touch capability
+            isTouchDevice = 'ontouchstart' in window ||
+                           navigator.maxTouchPoints > 0 ||
+                           navigator.msMaxTouchPoints > 0;
+
+            // Detect mobile device (screen size + touch capability)
+            isMobileDevice = window.matchMedia('(max-width: 768px)').matches && isTouchDevice;
+
+            console.log('Device detection:', { isTouchDevice, isMobileDevice });
+            return { isTouchDevice, isMobileDevice };
+        }
+
+        // Touch position helper function with coordinate conversion
+        function getTouchPosition(event, svg) {
+            const touch = event.touches[0] || event.changedTouches[0];
+            const rect = svg.getBoundingClientRect();
+
+            // Get pixel coordinates relative to SVG element
+            const pixelX = touch.clientX - rect.left;
+            const pixelY = touch.clientY - rect.top;
+
+            // Get the SVG viewBox dimensions
+            const viewBox = svg.viewBox.baseVal;
+            const viewBoxWidth = viewBox.width;
+            const viewBoxHeight = viewBox.height;
+
+            // Convert pixel coordinates to viewBox coordinates
+            const scaleX = viewBoxWidth / rect.width;
+            const scaleY = viewBoxHeight / rect.height;
+
+            return {
+                x: pixelX * scaleX,
+                y: pixelY * scaleY
+            };
+        }
+
+        // Update mobile info panel with trait/level information
+        function updateMobileInfoPanel(sliceIndex, segmentIndex = null) {
+            if (!isMobileDevice || !mobileInfoHeader || !mobileInfoContent) return;
+
+            const traitData = getTraitData(sliceIndex);
+            if (!traitData) {
+                // Default message when no valid data
+                mobileInfoHeader.textContent = "Touch any part of the wheel to explore traits";
+                mobileInfoContent.textContent = "Drag your finger across the wheel to see different trait descriptions and intensity levels.";
+                return;
+            }
+
+            if (segmentIndex !== null && segmentIndex >= 0 && segmentIndex < 5) {
+                // Show specific level information
+                const levelData = getLevelData(sliceIndex, segmentIndex);
+                if (levelData) {
+                    mobileInfoHeader.textContent = `${traitData.trait} - Level ${levelData.level}: ${levelData.description}`;
+                    mobileInfoContent.textContent = levelData.example;
+                }
+            } else {
+                // Show general trait information
+                mobileInfoHeader.textContent = traitData.trait.toUpperCase();
+                mobileInfoContent.textContent = traitData.definition;
+            }
+        }
+
+        // Manage touch visual feedback
+        function updateTouchFeedback(sliceIndex, segmentIndex) {
+            if (!isMobileDevice) return;
+
+            // Clear all existing touch feedback
+            const segments = document.querySelectorAll('.wheel-segment');
+            segments.forEach(segment => {
+                segment.classList.remove('touch-active');
+            });
+
+            // Add feedback to the currently touched segment
+            if (sliceIndex >= 0 && segmentIndex >= 0) {
+                const targetSegment = document.querySelector(
+                    `.wheel-segment[data-slice="${sliceIndex}"][data-segment="${segmentIndex}"]`
+                );
+                if (targetSegment) {
+                    targetSegment.classList.add('touch-active');
+                }
+            }
+        }
+
+        function clearTouchFeedback() {
+            if (!isMobileDevice) return;
+
+            const segments = document.querySelectorAll('.wheel-segment');
+            segments.forEach(segment => {
+                segment.classList.remove('touch-active');
+            });
+        }
+
         // Color generation functions
         function getSegmentColor(sliceIndex, segmentIndex, fillLevel) {
             // If this segment is beyond the fill level, return gradient gray
@@ -749,12 +1008,26 @@
             }
         }
 
-        // Interactive functionality
+        // Interactive functionality with coordinate conversion
         function getMousePosition(event, svg) {
             const rect = svg.getBoundingClientRect();
+
+            // Get pixel coordinates relative to SVG element
+            const pixelX = event.clientX - rect.left;
+            const pixelY = event.clientY - rect.top;
+
+            // Get the SVG viewBox dimensions
+            const viewBox = svg.viewBox.baseVal;
+            const viewBoxWidth = viewBox.width;
+            const viewBoxHeight = viewBox.height;
+
+            // Convert pixel coordinates to viewBox coordinates
+            const scaleX = viewBoxWidth / rect.width;
+            const scaleY = viewBoxHeight / rect.height;
+
             return {
-                x: event.clientX - rect.left,
-                y: event.clientY - rect.top
+                x: pixelX * scaleX,
+                y: pixelY * scaleY
             };
         }
 
@@ -979,7 +1252,10 @@
         function setupInteractivity() {
             const svg = document.getElementById('autism-wheel');
 
+            // Mouse event handlers (desktop)
             svg.addEventListener('mousedown', (event) => {
+                if (isTouchDevice) return; // Skip mouse events on touch devices
+
                 const mousePos = getMousePosition(event, svg);
                 const sliceIndex = getSliceFromAngle(mousePos.x, mousePos.y);
                 const fillLevel = getFillLevelFromRadius(mousePos.x, mousePos.y);
@@ -999,7 +1275,62 @@
                 }
             });
 
+            // Touch event handlers (mobile)
+            svg.addEventListener('touchstart', (event) => {
+                event.preventDefault(); // Prevent default touch behaviors
+
+                const touchPos = getTouchPosition(event, svg);
+                const sliceIndex = getSliceFromAngle(touchPos.x, touchPos.y);
+                const fillLevel = getFillLevelFromRadius(touchPos.x, touchPos.y);
+
+                // Calculate distance to see if we're within interaction bounds
+                const distance = Math.sqrt(
+                    Math.pow(touchPos.x - WHEEL_CENTER.x, 2) +
+                    Math.pow(touchPos.y - WHEEL_CENTER.y, 2)
+                );
+
+                // Check if user touched label area (for trait descriptions)
+                const labelRadius = OUTER_RADIUS + 52; // 302px - where labels are positioned
+                const labelTouchRadius = labelRadius + 30; // Add 30px for easier targeting
+
+                if (distance > OUTER_RADIUS && distance <= labelTouchRadius) {
+                    // User touched label area - show trait definition
+                    touchActive = true;
+                    updateMobileInfoPanel(sliceIndex, null); // null = show trait definition
+                    clearTouchFeedback(); // No visual feedback on labels
+                    return; // Don't process as wheel interaction
+                }
+
+                // Check if user touched within wheel bounds (including center for level 0 reset)
+                if (distance <= OUTER_RADIUS) {
+                    touchActive = true;
+                    isDragging = true;
+                    currentSlice = sliceIndex;
+
+                    if (distance < INNER_RADIUS && fillLevel === 0) {
+                        // Center drag - reset to level 0 (all gray)
+                        wheelState[sliceIndex] = 0;
+                        updateWheelColors();
+                        updateSliceOutlines();
+                        updateMobileInfoPanel(sliceIndex, null); // Show trait definition when reset to 0
+                        clearTouchFeedback(); // No segment feedback for level 0
+                    } else if (distance >= INNER_RADIUS) {
+                        // Normal wheel segment interaction (levels 1-5)
+                        wheelState[sliceIndex] = fillLevel;
+                        updateWheelColors();
+                        updateSliceOutlines();
+
+                        // Update mobile info panel and visual feedback with level-specific info
+                        const segmentIndex = Math.max(0, fillLevel - 1);
+                        updateMobileInfoPanel(sliceIndex, segmentIndex);
+                        updateTouchFeedback(sliceIndex, segmentIndex);
+                    }
+                }
+            });
+
             svg.addEventListener('mousemove', (event) => {
+                if (isTouchDevice) return; // Skip mouse events on touch devices
+
                 const mousePos = getMousePosition(event, svg);
                 const distance = Math.sqrt(
                     Math.pow(mousePos.x - WHEEL_CENTER.x, 2) +
@@ -1027,7 +1358,73 @@
                 }
             });
 
+            // Touch move handler (mobile)
+            svg.addEventListener('touchmove', (event) => {
+                event.preventDefault(); // Prevent scrolling while touching wheel
+
+                const touchPos = getTouchPosition(event, svg);
+                const sliceIndex = getSliceFromAngle(touchPos.x, touchPos.y);
+                const fillLevel = getFillLevelFromRadius(touchPos.x, touchPos.y);
+
+                const distance = Math.sqrt(
+                    Math.pow(touchPos.x - WHEEL_CENTER.x, 2) +
+                    Math.pow(touchPos.y - WHEEL_CENTER.y, 2)
+                );
+
+                // Check if user moved to label area
+                const labelRadius = OUTER_RADIUS + 52; // 302px - where labels are positioned
+                const labelTouchRadius = labelRadius + 30; // Add 30px for easier targeting
+
+                if (touchActive && distance > OUTER_RADIUS && distance <= labelTouchRadius) {
+                    // User moved to label area - show trait definition
+                    isDragging = false; // Stop dragging behavior
+                    updateMobileInfoPanel(sliceIndex, null); // null = show trait definition
+                    clearTouchFeedback(); // No visual feedback on labels
+                    return; // Don't process as wheel interaction
+                }
+
+                if (touchActive && isDragging) {
+                    // Update wheel state if within bounds (including center for level 0)
+                    if (distance <= OUTER_RADIUS) {
+                        currentSlice = sliceIndex;
+
+                        if (distance < INNER_RADIUS && fillLevel === 0) {
+                            // Center drag - reset to level 0 (all gray)
+                            wheelState[sliceIndex] = 0;
+                            updateWheelColors();
+                            updateSliceOutlines();
+                            updateMobileInfoPanel(sliceIndex, null); // Show trait definition when reset to 0
+                            clearTouchFeedback(); // No segment feedback for level 0
+                        } else if (distance >= INNER_RADIUS) {
+                            // Normal wheel segment interaction (levels 1-5)
+                            wheelState[sliceIndex] = fillLevel;
+                            updateWheelColors();
+                            updateSliceOutlines();
+
+                            // Real-time mobile info panel updates and visual feedback
+                            const segmentIndex = Math.max(0, fillLevel - 1);
+                            updateMobileInfoPanel(sliceIndex, segmentIndex);
+                            updateTouchFeedback(sliceIndex, segmentIndex);
+                        }
+                    }
+                } else if (touchActive && distance <= OUTER_RADIUS) {
+                    // Just touching, not dragging - handle both center and segments
+                    if (distance < INNER_RADIUS && fillLevel === 0) {
+                        // Touching center - show trait definition
+                        updateMobileInfoPanel(sliceIndex, null);
+                        clearTouchFeedback();
+                    } else if (distance >= INNER_RADIUS) {
+                        // Touching segments - show level info and feedback
+                        const segmentIndex = Math.max(0, fillLevel - 1);
+                        updateMobileInfoPanel(sliceIndex, segmentIndex);
+                        updateTouchFeedback(sliceIndex, segmentIndex);
+                    }
+                }
+            });
+
             svg.addEventListener('mouseleave', (event) => {
+                if (isTouchDevice) return; // Skip mouse events on touch devices
+
                 // Clear hover state when leaving SVG, but only if not dragging
                 if (!isDragging && hoveredSlice !== -1) {
                     hoveredSlice = -1;
@@ -1035,11 +1432,59 @@
                 }
             });
 
+            // Touch end handlers (mobile)
+            svg.addEventListener('touchend', (event) => {
+                event.preventDefault();
+
+                if (touchActive) {
+                    touchActive = false;
+                    isDragging = false;
+                    currentSlice = -1;
+                    updateSliceOutlines();
+                    clearTouchFeedback();
+                }
+            });
+
+            svg.addEventListener('touchcancel', (event) => {
+                event.preventDefault();
+
+                if (touchActive) {
+                    touchActive = false;
+                    isDragging = false;
+                    currentSlice = -1;
+                    updateSliceOutlines();
+                    clearTouchFeedback();
+                }
+            });
+
             document.addEventListener('mouseup', () => {
+                if (isTouchDevice) return; // Skip mouse events on touch devices
+
                 if (isDragging) {
                     isDragging = false;
                     currentSlice = -1;
                     updateSliceOutlines();
+                }
+            });
+
+            // Document-level touch handlers to ensure proper cleanup
+            document.addEventListener('touchend', (event) => {
+                if (touchActive) {
+                    touchActive = false;
+                    isDragging = false;
+                    currentSlice = -1;
+                    updateSliceOutlines();
+                    clearTouchFeedback();
+                }
+            });
+
+            document.addEventListener('touchcancel', (event) => {
+                if (touchActive) {
+                    touchActive = false;
+                    isDragging = false;
+                    currentSlice = -1;
+                    updateSliceOutlines();
+                    clearTouchFeedback();
                 }
             });
 
@@ -1053,6 +1498,13 @@
         function initWheel() {
             console.log('Initializing wheel...');
 
+            // Detect device capabilities
+            detectDeviceCapabilities();
+
+            // Initialize mobile info panel elements
+            mobileInfoHeader = document.getElementById('mobile-info-header');
+            mobileInfoContent = document.getElementById('mobile-info-content');
+
             // Generate wheel components
             generateWheelSlices();
             generateWheelLabels();
@@ -1064,6 +1516,7 @@
             setupTooltips();
 
             console.log('Wheel complete with interactivity and tooltips');
+            console.log('Mobile mode:', isMobileDevice, 'Touch device:', isTouchDevice);
         }
 
         // Initialize when page loads
