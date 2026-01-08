@@ -254,6 +254,88 @@
                 padding: 10px 12px;
             }
         }
+
+        /* ========================================
+           SUPPORT LEVEL STYLING
+           ======================================== */
+
+        /* Desktop Support Level - positioned at bottom of screen */
+        .desktop-support-level {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 500;
+        }
+
+        /* Mobile Support Level - above info panel */
+        .mobile-support-level {
+            display: none; /* Hidden by default, shown on mobile */
+            background: white;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Support Level Toggle Button - shared styles */
+        .support-level-toggle {
+            background: #007cba;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 124, 186, 0.3);
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .support-level-toggle:hover {
+            background: #005fa3;
+            box-shadow: 0 4px 12px rgba(0, 124, 186, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .support-level-toggle:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 124, 186, 0.3);
+        }
+
+        /* Mobile-specific styles */
+        @media (max-width: 768px) {
+            /* Hide desktop Support Level on mobile */
+            .desktop-support-level {
+                display: none;
+            }
+
+            /* Show mobile Support Level */
+            .mobile-support-level {
+                display: block;
+            }
+
+            /* Adjust mobile button styling */
+            .mobile-support-level .support-level-toggle {
+                width: 100%;
+                font-size: 15px;
+                padding: 12px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mobile-support-level {
+                padding: 12px 15px;
+            }
+
+            .mobile-support-level .support-level-toggle {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -264,6 +346,13 @@
                     <!-- Wheel segments will be generated here -->
                 </svg>
             </div>
+        </div>
+
+        <!-- Mobile Support Level Display -->
+        <div id="mobile-support-level" class="mobile-support-level">
+            <button id="mobile-support-level-toggle" class="support-level-toggle">
+                Show Support Level
+            </button>
         </div>
 
         <!-- Mobile Info Panel -->
@@ -281,6 +370,13 @@
     <div id="trait-tooltip" class="tooltip">
         <div class="tooltip-header"></div>
         <div class="tooltip-content"></div>
+    </div>
+
+    <!-- Desktop Support Level Display -->
+    <div id="desktop-support-level" class="desktop-support-level">
+        <button id="desktop-support-level-toggle" class="support-level-toggle">
+            Show Support Level
+        </button>
     </div>
 
     <script>
@@ -310,6 +406,59 @@
 
         // Legacy WHEEL_LABELS array for backward compatibility (derived from WHEEL_CONFIG)
         const WHEEL_LABELS = WHEEL_CONFIG.map(config => config.displayLabel);
+
+        // ========================================
+        // SUPPORT LEVEL CONFIGURATION
+        // ========================================
+        // Modify these criteria to adjust Support Level calculation logic
+        const SUPPORT_LEVEL_CONFIG = {
+            // Display texts for each support level (shown in the toggle button)
+            displayTexts: {
+                0: "Does not qualify as ASD",
+                1: "Level 1, Some Support",
+                2: "Level 2, Substantial Support",
+                3: "Level 3, Very Substantial Support"
+            },
+
+            // Evaluation criteria for each level (evaluated in reverse order: Level 3 → 2 → 1 → 0)
+            // Each level has two conditions joined by OR - if either condition is met, that level applies
+            criteria: {
+                // Level 3: Highest priority - checked first
+                level3: {
+                    segmentThreshold: 52,  // Total segment count > 52
+                    traitRequirements: {
+                        level4OrHigher: 10,  // At least 10 traits >= Level 4
+                        level5OrHigher: 5    // AND at least 5 traits >= Level 5
+                    }
+                },
+
+                // Level 2: Medium priority - checked second
+                level2: {
+                    segmentThreshold: 42,  // Total segment count > 42
+                    traitRequirements: {
+                        level3OrHigher: 12,  // At least 12 traits >= Level 3
+                        level4OrHigher: 5    // AND at least 5 traits >= Level 4
+                    }
+                },
+
+                // Level 1: Lower priority - checked third
+                level1: {
+                    segmentThreshold: 32,  // Total segment count > 32
+                    traitRequirements: {
+                        level2OrHigher: 12,  // At least 12 traits >= Level 2
+                        level3OrHigher: 5    // AND at least 5 traits >= Level 3
+                    }
+                }
+
+                // Level 0 (Does not qualify): Default - if none of the above criteria are met
+            },
+
+            // UI Configuration
+            ui: {
+                initialText: "Show Support Level",
+                hideText: "Hide Support Level"
+            }
+        };
 
         // Color palette for each slice (base hues)
         // const SLICE_COLORS = [
@@ -1011,6 +1160,10 @@
                     segment.classList.add('filled');
                 }
             });
+
+            // Calculate and update Support Level
+            const currentSupportLevel = calculateSupportLevel(wheelState);
+            updateSupportLevelDisplay(currentSupportLevel);
         }
 
         // Helper functions for traits data - ID-based lookup system
@@ -1120,6 +1273,179 @@
             }
 
             return trait.intensityLevels[segmentIndex];
+        }
+
+        // ========================================
+        // SUPPORT LEVEL CALCULATION SYSTEM
+        // ========================================
+
+        // Calculate total number of active segments across all traits
+        function getTotalSegmentCount(wheelState) {
+            return wheelState.reduce((total, traitLevel) => total + traitLevel, 0);
+        }
+
+        // Count how many traits meet or exceed a minimum level
+        function countTraitsAtLevel(wheelState, minLevel) {
+            return wheelState.filter(traitLevel => traitLevel >= minLevel).length;
+        }
+
+        // Main Support Level calculation function with reverse priority logic
+        function calculateSupportLevel(wheelState) {
+            const totalSegments = getTotalSegmentCount(wheelState);
+            const config = SUPPORT_LEVEL_CONFIG.criteria;
+
+            // Evaluate in reverse order (Level 3 → 2 → 1 → 0)
+            // Level 3: Highest priority
+            const level3Criteria = config.level3;
+            const level3SegmentMet = totalSegments > level3Criteria.segmentThreshold;
+            const level3TraitsMet = (
+                countTraitsAtLevel(wheelState, 4) >= level3Criteria.traitRequirements.level4OrHigher &&
+                countTraitsAtLevel(wheelState, 5) >= level3Criteria.traitRequirements.level5OrHigher
+            );
+            if (level3SegmentMet || level3TraitsMet) {
+                return 3;
+            }
+
+            // Level 2: Medium priority
+            const level2Criteria = config.level2;
+            const level2SegmentMet = totalSegments > level2Criteria.segmentThreshold;
+            const level2TraitsMet = (
+                countTraitsAtLevel(wheelState, 3) >= level2Criteria.traitRequirements.level3OrHigher &&
+                countTraitsAtLevel(wheelState, 4) >= level2Criteria.traitRequirements.level4OrHigher
+            );
+            if (level2SegmentMet || level2TraitsMet) {
+                return 2;
+            }
+
+            // Level 1: Lower priority
+            const level1Criteria = config.level1;
+            const level1SegmentMet = totalSegments > level1Criteria.segmentThreshold;
+            const level1TraitsMet = (
+                countTraitsAtLevel(wheelState, 2) >= level1Criteria.traitRequirements.level2OrHigher &&
+                countTraitsAtLevel(wheelState, 3) >= level1Criteria.traitRequirements.level3OrHigher
+            );
+            if (level1SegmentMet || level1TraitsMet) {
+                return 1;
+            }
+
+            // Level 0: Default - does not qualify as ASD
+            return 0;
+        }
+
+        // ========================================
+        // SUPPORT LEVEL UI MANAGEMENT
+        // ========================================
+
+        // Global state for Support Level display
+        let supportLevelVisible = false;
+        let currentSupportLevel = 0;
+
+        // Update Support Level display for both desktop and mobile
+        function updateSupportLevelDisplay(supportLevel) {
+            currentSupportLevel = supportLevel;
+
+            if (supportLevelVisible) {
+                // Update button text to show current level
+                const displayText = SUPPORT_LEVEL_CONFIG.displayTexts[supportLevel];
+                const hideText = SUPPORT_LEVEL_CONFIG.ui.hideText;
+                const fullText = `${displayText} - ${hideText}`;
+
+                // Update both desktop and mobile buttons
+                const desktopButton = document.getElementById('desktop-support-level-toggle');
+                const mobileButton = document.getElementById('mobile-support-level-toggle');
+
+                if (desktopButton) {
+                    desktopButton.textContent = fullText;
+                }
+                if (mobileButton) {
+                    mobileButton.textContent = fullText;
+                }
+            } else {
+                // Keep showing initial text when hidden
+                const initialText = SUPPORT_LEVEL_CONFIG.ui.initialText;
+
+                const desktopButton = document.getElementById('desktop-support-level-toggle');
+                const mobileButton = document.getElementById('mobile-support-level-toggle');
+
+                if (desktopButton) {
+                    desktopButton.textContent = initialText;
+                }
+                if (mobileButton) {
+                    mobileButton.textContent = initialText;
+                }
+            }
+        }
+
+        // Toggle Support Level visibility
+        function toggleSupportLevelDisplay() {
+            supportLevelVisible = !supportLevelVisible;
+            updateSupportLevelDisplay(currentSupportLevel);
+        }
+
+        // Initialize Support Level toggle event handlers
+        function initializeSupportLevelToggles() {
+            const desktopButton = document.getElementById('desktop-support-level-toggle');
+            const mobileButton = document.getElementById('mobile-support-level-toggle');
+
+            if (desktopButton) {
+                desktopButton.addEventListener('click', toggleSupportLevelDisplay);
+            }
+            if (mobileButton) {
+                mobileButton.addEventListener('click', toggleSupportLevelDisplay);
+            }
+        }
+
+        // Test function to verify Support Level calculations
+        function testSupportLevelCalculations() {
+            console.log('🧪 Testing Support Level calculations...');
+
+            const testCases = [
+                {
+                    name: 'All zeros (should be Level 0)',
+                    wheelState: [0,0,0,0,0,0,0,0,0,0,0,0],
+                    expectedLevel: 0
+                },
+                {
+                    name: 'Level 1 by segments (33 total)',
+                    wheelState: [3,3,3,3,3,3,3,3,3,3,2,1],
+                    expectedLevel: 1
+                },
+                {
+                    name: 'Level 1 by traits (12 traits >=2, 5 traits >=3)',
+                    wheelState: [2,2,2,2,2,2,2,2,2,2,3,3],
+                    expectedLevel: 1
+                },
+                {
+                    name: 'Level 2 by segments (43 total)',
+                    wheelState: [4,4,4,4,4,4,4,4,4,3,2,2],
+                    expectedLevel: 2
+                },
+                {
+                    name: 'Level 3 by segments (53 total)',
+                    wheelState: [5,5,5,5,5,4,4,4,4,4,4,2],
+                    expectedLevel: 3
+                },
+                {
+                    name: 'Level 3 by traits (10 traits >=4, 5 traits >=5)',
+                    wheelState: [5,5,5,5,5,4,4,4,4,4,3,2],
+                    expectedLevel: 3
+                }
+            ];
+
+            testCases.forEach(testCase => {
+                const result = calculateSupportLevel(testCase.wheelState);
+                const totalSegments = getTotalSegmentCount(testCase.wheelState);
+                const traitsLevel2 = countTraitsAtLevel(testCase.wheelState, 2);
+                const traitsLevel3 = countTraitsAtLevel(testCase.wheelState, 3);
+                const traitsLevel4 = countTraitsAtLevel(testCase.wheelState, 4);
+                const traitsLevel5 = countTraitsAtLevel(testCase.wheelState, 5);
+
+                console.log(`   ${testCase.name}:`);
+                console.log(`     Segments: ${totalSegments}, L2+: ${traitsLevel2}, L3+: ${traitsLevel3}, L4+: ${traitsLevel4}, L5: ${traitsLevel5}`);
+                console.log(`     Expected: ${testCase.expectedLevel}, Got: ${result} ${result === testCase.expectedLevel ? '✅' : '❌'}`);
+            });
+
+            console.log('🧪 Support Level calculation tests completed!');
         }
 
         // Helper function to create SVG path for a segment
@@ -1752,6 +2078,14 @@
                 // Step 6: Initialize tooltip system
                 tooltip = document.getElementById('trait-tooltip');
                 setupTooltips();
+
+                // Step 7: Initialize Support Level system
+                initializeSupportLevelToggles();
+                const initialSupportLevel = calculateSupportLevel(wheelState);
+                updateSupportLevelDisplay(initialSupportLevel);
+
+                // Test Support Level calculations with sample data
+                testSupportLevelCalculations();
 
                 console.log('✅ Wheel initialization complete!');
                 console.log(`📱 Mobile mode: ${isMobileDevice}, Touch device: ${isTouchDevice}`);
