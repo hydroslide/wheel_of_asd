@@ -1,6 +1,12 @@
-# Interactive Autism Wheel
+# [Interactive Autism Wheel](https://hydroslide.github.io/wheel_of_asd/)
 
-An interactive HTML-based autism assessment wheel with hover tooltips that provide detailed information about each trait and intensity level.
+This app is an interactive HTML-based autism assessment wheel with hover tooltips that provide detailed information about each trait and intensity level. It is designed to be utilized by a teen or a parent to help better understand their unique autism "fingerprint" and maybe determine what level of support they require.
+
+The autism "spectrum" is a pretty bad misnomer and even worse visualization. It conjurs an image of a one dimensional linear spectrum and anyone who knows someone on the spectrum is aware that it is anything but one dimesional.
+
+This wheel is based on the one found in this [great documentary](https://youtu.be/E-yaxqDsfgY?si=vk5i5_Vcwte5e8VR) by [Be Smart](https://www.youtube.com/@besmart). The whole video is worth watching, but you can jump directly to the wheel of autism [here](https://youtu.be/E-yaxqDsfgY?si=vI0wz5dbqkJNdyzC&t=131).
+
+You can access the interactive wheel [here](https://hydroslide.github.io/wheel_of_asd/).
 
 ## Features
 
