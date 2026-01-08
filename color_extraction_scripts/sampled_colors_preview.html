@@ -1,0 +1,314 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Directly Sampled Autism Wheel Colors</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        h1 { color: #333; text-align: center; }
+        .summary { background: #e8f4f8; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background: #f0f0f0; font-weight: bold; }
+        .color-cell { position: relative; }
+        .color-box { width: 80px; height: 40px; margin: 5px auto; border: 2px solid #333; border-radius: 4px; }
+        .color-info { font-family: monospace; font-size: 11px; margin-top: 5px; }
+        .null-color { background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #e0e0e0 10px, #e0e0e0 20px); }
+        .trait-name { font-weight: bold; background: #f8f9fa; }
+        .level-header { background: #e9ecef; font-weight: bold; }
+        .missing { color: #dc3545; }
+        .found { color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Directly Sampled Autism Wheel Colors</h1>
+        <div class="summary">
+            <h3>Sampling Methodology</h3>
+            <ul>
+                <li><strong>Direct pixel sampling</strong> from "Wheel of Autism 2.png" and "Wheel of Autism 3.png"</li>
+                <li><strong>No interpolation or generation</strong> - only actual pixels from images</li>
+                <li><strong>OR Logic:</strong> Use colored pixel if found in either image</li>
+                <li><strong>Gray Detection:</strong> RGB differences < 25 = gray (inactive)</li>
+                <li><strong>Missing Colors:</strong> Shown as null where only gray pixels found</li>
+            </ul>
+        </div>
+
+        <table>
+            <tr>
+                <th rowspan="2">Trait</th>
+                <th colspan="5">Intensity Levels (Center → Edge)</th>
+            </tr>
+            <tr>
+                <td class="level-header">Level 1<br>(Lightest)</td>
+                <td class="level-header">Level 2</td>
+                <td class="level-header">Level 3</td>
+                <td class="level-header">Level 4</td>
+                <td class="level-header">Level 5<br>(Most Intense)</td>
+            </tr>
+            <tr><td class="trait-name">Emotional Regulation</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fcfcb7;"></div>
+                    <div class="color-info found">#fcfcb7</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fff770;"></div>
+                    <div class="color-info found">#fff770</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fff42a;"></div>
+                    <div class="color-info found">#fff42a</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fff000;"></div>
+                    <div class="color-info found">#fff000</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box null-color" style="background-color: #c0c0c0;"></div>
+                    <div class="color-info missing">null<br><small>(gray: #c0c0c0)</small></div>
+                </td></tr>
+            <tr><td class="trait-name">Social Interaction</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fef1b9;"></div>
+                    <div class="color-info found">#fef1b9</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fde471;"></div>
+                    <div class="color-info found">#fde471</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fdd42a;"></div>
+                    <div class="color-info found">#fdd42a</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fdc601;"></div>
+                    <div class="color-info found">#fdc601</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fbb800;"></div>
+                    <div class="color-info found">#fbb800</div>
+                </td></tr>
+            <tr><td class="trait-name">Speech</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fee1b8;"></div>
+                    <div class="color-info found">#fee1b8</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fdc071;"></div>
+                    <div class="color-info found">#fdc071</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fda229;"></div>
+                    <div class="color-info found">#fda229</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fc8201;"></div>
+                    <div class="color-info found">#fc8201</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box null-color" style="background-color: #c0c0c0;"></div>
+                    <div class="color-info missing">null<br><small>(gray: #c0c0c0)</small></div>
+                </td></tr>
+            <tr><td class="trait-name">Sensory Sensitivities</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fdceba;"></div>
+                    <div class="color-info found">#fdceba</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fba073;"></div>
+                    <div class="color-info found">#fba073</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fa6e2c;"></div>
+                    <div class="color-info found">#fa6e2c</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #f73f01;"></div>
+                    <div class="color-info found">#f73f01</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #f50e00;"></div>
+                    <div class="color-info found">#f50e00</div>
+                </td></tr>
+            <tr><td class="trait-name">Nonverbal Communication</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #ffc0bc;"></div>
+                    <div class="color-info found">#ffc0bc</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #ff7f72;"></div>
+                    <div class="color-info found">#ff7f72</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fd4029;"></div>
+                    <div class="color-info found">#fd4029</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fe0000;"></div>
+                    <div class="color-info found">#fe0000</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #fe0000;"></div>
+                    <div class="color-info found">#fe0000</div>
+                </td></tr>
+            <tr><td class="trait-name">Perception</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #e5c6e5;"></div>
+                    <div class="color-info found">#e5c6e5</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #d08cd0;"></div>
+                    <div class="color-info found">#d08cd0</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #b852b6;"></div>
+                    <div class="color-info found">#b852b6</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #a3199f;"></div>
+                    <div class="color-info found">#a3199f</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #8a0187;"></div>
+                    <div class="color-info found">#8a0187</div>
+                </td></tr>
+            <tr><td class="trait-name">Executive Functions</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #dbc1e5;"></div>
+                    <div class="color-info found">#dbc1e5</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #b684cb;"></div>
+                    <div class="color-info found">#b684cb</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #9248b0;"></div>
+                    <div class="color-info found">#9248b0</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #6c0b96;"></div>
+                    <div class="color-info found">#6c0b96</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box null-color" style="background-color: #c0c0c0;"></div>
+                    <div class="color-info missing">null<br><small>(gray: #c0c0c0)</small></div>
+                </td></tr>
+            <tr><td class="trait-name">Intense Interests</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #d8cafe;"></div>
+                    <div class="color-info found">#d8cafe</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #b195ff;"></div>
+                    <div class="color-info found">#b195ff</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #8b62fd;"></div>
+                    <div class="color-info found">#8b62fd</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #652dfe;"></div>
+                    <div class="color-info found">#652dfe</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #3e00fd;"></div>
+                    <div class="color-info found">#3e00fd</div>
+                </td></tr>
+            <tr><td class="trait-name">Cognitive Flexibility</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #bdd2ff;"></div>
+                    <div class="color-info found">#bdd2ff</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #78a7fe;"></div>
+                    <div class="color-info found">#78a7fe</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #387cff;"></div>
+                    <div class="color-info found">#387cff</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #004ffe;"></div>
+                    <div class="color-info found">#004ffe</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #0023fe;"></div>
+                    <div class="color-info found">#0023fe</div>
+                </td></tr>
+            <tr><td class="trait-name">Repetitive Behaviors</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #bedfda;"></div>
+                    <div class="color-info found">#bedfda</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #7fbfb5;"></div>
+                    <div class="color-info found">#7fbfb5</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #3fa091;"></div>
+                    <div class="color-info found">#3fa091</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #007f6b;"></div>
+                    <div class="color-info found">#007f6b</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #005f47;"></div>
+                    <div class="color-info found">#005f47</div>
+                </td></tr>
+            <tr><td class="trait-name">Motor Skills/Coordination</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #c3ead0;"></div>
+                    <div class="color-info found">#c3ead0</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #85d59e;"></div>
+                    <div class="color-info found">#85d59e</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #46c26d;"></div>
+                    <div class="color-info found">#46c26d</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #0aad3d;"></div>
+                    <div class="color-info found">#0aad3d</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #00980a;"></div>
+                    <div class="color-info found">#00980a</div>
+                </td></tr>
+            <tr><td class="trait-name">Sensory Processing</td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #dff7c9;"></div>
+                    <div class="color-info found">#dff7c9</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #bfee91;"></div>
+                    <div class="color-info found">#bfee91</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #9de75b;"></div>
+                    <div class="color-info found">#9de75b</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #7cdf25;"></div>
+                    <div class="color-info found">#7cdf25</div>
+                </td>
+                <td class="color-cell">
+                    <div class="color-box" style="background-color: #5bd700;"></div>
+                    <div class="color-info found">#5bd700</div>
+                </td></tr>
+
+        </table>
+
+        <div class="summary">
+            <h3>Results Summary</h3>
+            <p><strong>Colors Found:</strong> <span class="found">57/60</span> segments have non-gray colors</p>
+            <p><strong>Missing:</strong> <span class="missing">3</span> segments only contain gray pixels</p>
+            <p><strong>Sampling Method:</strong> Direct pixel sampling at segment midpoints</p>
+            <p><strong>Gray pixels are shown for preview but marked as null in JSON output</strong></p>
+        </div>
+    </div>
+</body>
+</html>

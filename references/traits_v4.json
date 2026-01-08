@@ -37,22 +37,22 @@
       {
         "level": 1,
         "description": "Minimal impact",
-        "example": "You might get frustrated or upset more easily than friends when things don't go as planned or aren't fair, but can usually calm yourself down fairly quickly."
+        "example": "You might get frustrated or upset more easily than friends when things don't go as planned, but can usually calm yourself down fairly quickly."
       },
       {
         "level": 2,
         "description": "Mild challenges",
-        "example": "Unexpected changes can make you anxious, frustrated, or upset, things that seem wrong or don't make sense can bother you more than others, and you may need time alone, deep breathing, listening to music, going for a walk, or other specific strategies to regulate."
+        "example": "Unexpected changes can make you anxious, frustrated, or upset, and you may need time alone, deep breathing, listening to music, going for a walk, or other specific strategies to regulate."
       },
       {
         "level": 3,
         "description": "Moderate impact",
-        "example": "You have regular meltdowns (which could involve crying, shouting, or pacing) or shutdowns (going quiet and withdrawing), things that violate your sense of how things should be can cause intense distress that lasts for hours, you need a calm-down space, and require help identifying and managing your big emotions."
+        "example": "You have regular meltdowns (which could involve crying, shouting, or pacing) or shutdowns (going quiet and withdrawing), need a calm-down space, and require help identifying and managing your big emotions."
       },
       {
         "level": 4,
         "description": "Substantial challenges",
-        "example": "Emotional dysregulation happens frequently throughout the day (which may include meltdowns, shutdowns, emotional outbursts, strong reactions when things go against your values or expectations, extreme silliness, or social withdrawal), significantly disrupting school and relationships, requiring consistent support and intervention strategies."
+        "example": "Emotional dysregulation happens frequently throughout the day (which may include meltdowns, shutdowns, emotional outbursts, extreme silliness, or social withdrawal), significantly disrupting school and relationships, requiring consistent support and intervention strategies."
       },
       {
         "level": 5,
@@ -68,22 +68,22 @@
       {
         "level": 1,
         "description": "Minimal impact",
-        "example": "You have friends and can chat with people, but might sometimes miss hints, not know when someone's done talking, struggle with small talk, find group conversations tiring, or occasionally be more direct than expected."
+        "example": "You have friends and can chat with people, but might sometimes miss hints, not know when someone's done talking, struggle with small talk, or find group conversations tiring."
       },
       {
         "level": 2,
         "description": "Mild challenges",
-        "example": "Making friends takes effort, you might prefer talking about your interests or things you care deeply about, have trouble with turn-taking in conversations, misread social cues, say what you think even when it creates awkwardness, and group conversations can be confusing or draining."
+        "example": "Making friends takes effort, you might prefer talking about your interests, have trouble with turn-taking in conversations, misread social cues, and group conversations can be confusing or draining."
       },
       {
         "level": 3,
         "description": "Moderate impact",
-        "example": "You struggle to start conversations or make friends without support, have trouble with back-and-forth dialogue, knowing what to say or when to speak, your strong opinions or reactions to things you disagree with can create social challenges, and social situations feel very stressful and confusing."
+        "example": "You struggle to start conversations or make friends without support, have trouble with back-and-forth dialogue, knowing what to say or when to speak, and social situations feel very stressful and confusing."
       },
       {
         "level": 4,
         "description": "Substantial challenges",
-        "example": "Social interactions are very difficult - you rarely initiate them, respond minimally or in unusual ways when others approach you, have marked difficulty forming relationships, your intense focus on your principles or how you believe things should be can be misunderstood by others, and you need significant coaching or scripts to engage socially."
+        "example": "Social interactions are very difficult - you rarely initiate them, respond minimally or in unusual ways when others approach you, have marked difficulty forming relationships, and need significant coaching or scripts to engage socially."
       },
       {
         "level": 5,
@@ -99,17 +99,17 @@
       {
         "level": 1,
         "description": "Minimal impact",
-        "example": "You might speak a bit differently than others - could be overly formal, unusual rhythm or pitch, too loud or too quiet at times, occasional word-finding pauses, sometimes over-explaining things, or taking a moment to organize your thoughts mid-sentence, but people generally understand you fine."
+        "example": "Your voice might sound a bit monotone, flat, or overly formal, you may speak with unusual rhythm or pitch, but people generally understand you fine in conversations."
       },
       {
         "level": 2,
         "description": "Mild challenges",
-        "example": "You might repeat favorite phrases, speak with unusual rhythm (too fast, robotic, or sing-song), struggle with word-finding, use very formal language, have trouble with volume control, frequently start and stop while organizing your thoughts, over-explain details before getting to the point, make multiple revisions or false starts to get your wording right, or your tone doesn't always match your emotions."
+        "example": "You repeat favorite phrases, speak with robotic or sing-song rhythm, struggle with word-finding when stressed, use very formal or 'scripted' language, have trouble with volume control, or your tone doesn't always match your emotions."
       },
       {
         "level": 3,
         "description": "Moderate impact",
-        "example": "You may use frequent echolalia (repeating phrases you've heard), have significant difficulty organizing thoughts while speaking (with many false starts, revisions, or pauses), struggle with conversation flow and pragmatics (knowing what to say when), speak in a very flat or unusual tone, have trouble with pronouns, or find spontaneous speech very challenging."
+        "example": "You use echolalia frequently (repeating phrases you've heard), have major difficulty with conversation flow and pragmatics (knowing what to say when), speak in a very flat or unusual tone, struggle with pronouns, or have marked difficulty with spontaneous speech."
       },
       {
         "level": 4,
@@ -135,17 +135,17 @@
       {
         "level": 2,
         "description": "Mild challenges",
-        "example": "You avoid tags in clothes, certain food textures, need to cover your ears during fire drills, wear sunglasses on cloudy days, dislike certain smells, unexpected touch (like someone grabbing your arm) can feel surprisingly painful or startling, or you might not notice pain, temperature, or hunger as easily as others."
+        "example": "You avoid tags in clothes, certain food textures, need to cover your ears during fire drills, wear sunglasses on cloudy days, dislike certain smells, or you might not notice pain, temperature, or hunger as easily as others."
       },
       {
         "level": 3,
         "description": "Moderate impact",
-        "example": "Multiple sensitivities affect your daily life - you can only wear certain fabrics, need sunglasses indoors, avoid crowded or noisy places, have strong food aversions, must plan around sensory triggers, unexpected or light touch can cause intense pain or discomfort while you might not notice injuries from repetitive actions (like picking or scratching), you might seek intense flavors, or have extreme sensitivity to some sensations but high tolerance for others."
+        "example": "Multiple sensitivities affect your daily life - you can only wear certain fabrics, need sunglasses indoors, avoid crowded or noisy places, have strong food aversions, must plan around sensory triggers, or you might seek intense flavors, not notice injuries, or have high pain tolerance for some things but extreme sensitivity to unexpected touch."
       },
       {
         "level": 4,
         "description": "Substantial challenges",
-        "example": "Severe sensitivities (which could involve light, sound, touch, smell, taste, pain, or temperature - either over- or under-responsive) significantly limit what activities and locations you can handle, unexpected touch or certain textures cause extreme distress or pain reactions, you may have very high pain tolerance for some things but severe sensitivity to others, cause frequent distress, and require extensive environmental modifications or constant sensory seeking."
+        "example": "Severe sensitivities (which could involve light, sound, touch, smell, taste, pain, or temperature - either over- or under-responsive) significantly limit what activities and locations you can handle, cause frequent distress, and require extensive environmental modifications or constant sensory seeking."
       },
       {
         "level": 5,
@@ -192,27 +192,27 @@
       {
         "level": 1,
         "description": "Minimal impact",
-        "example": "You notice small details in patterns, sounds, textures, or your environment that others miss - like tiny spots, distant noises, or subtle patterns - or you might have occasional trouble recognizing people you don't see often."
+        "example": "You notice small details in patterns, sounds, textures, or your environment that others miss - like tiny spots, distant noises, or subtle patterns."
       },
       {
         "level": 2,
         "description": "Mild challenges",
-        "example": "You focus on details and sometimes miss the main point of stories or conversations, need extra time to process what you're seeing or hearing, have trouble filtering background noise, or sometimes confuse people with similar features (like hairstyle, build, or general appearance) especially if you see them out of their usual context."
+        "example": "You focus on details and sometimes miss the main point of stories or conversations, need extra time to process what you're seeing, hearing, or reading, or have trouble filtering background noise."
       },
       {
         "level": 3,
         "description": "Moderate impact",
-        "example": "You process visual and auditory information differently enough that noisy environments are very overwhelming, you struggle with understanding the 'big picture,' following fast conversations can be very hard, you have trouble integrating what you see and hear simultaneously, or you regularly confuse people who share similar features and rely heavily on other cues like voice, clothing, or hairstyle to recognize them."
+        "example": "You process visual and auditory information differently enough that noisy environments are very overwhelming, you struggle with understanding the 'big picture,' following fast conversations can be very hard, or you have trouble integrating what you see and hear simultaneously."
       },
       {
         "level": 4,
         "description": "Substantial challenges",
-        "example": "Your perceptual differences make it difficult to understand complex social scenes, integrate information from different senses at once, filter out background stimuli, track moving objects, navigate busy environments safely, or you have significant difficulty recognizing people (even those you know well) without relying on distinctive cues like voice, clothing, or unique physical features."
+        "example": "Your perceptual differences make it difficult to understand complex social scenes, integrate information from different senses at once, filter out background stimuli, track moving objects, or navigate busy environments safely."
       },
       {
         "level": 5,
         "description": "Very substantial impact",
-        "example": "Severe perceptual processing differences mean you need intensive support to interpret and respond to your environment, with significant challenges understanding, organizing, or making sense of what you see, hear, and experience around you, or you may be unable to recognize even close family members or friends by their faces alone."
+        "example": "Severe perceptual processing differences mean you need intensive support to interpret and respond to your environment, with significant challenges understanding, organizing, or making sense of what you see, hear, and experience around you."
       }
     ]
   },
@@ -223,17 +223,17 @@
       {
         "level": 1,
         "description": "Minimal impact",
-        "example": "You occasionally forget assignments, lose track of time, misplace things, procrastinate, or need a moment to organize your thoughts before responding, but can manage with occasional reminders, timers, or a planner."
+        "example": "You occasionally forget assignments, lose track of time, misplace things, or procrastinate, but can manage with occasional reminders, timers, or a planner."
       },
       {
         "level": 2,
         "description": "Mild challenges",
-        "example": "You need help getting started on tasks, rely on visual schedules and checklists, struggle with time management, prioritizing what to do first, organizing thoughts for speaking or writing, holding multiple ideas in your mind at once (working memory), and find organizing your belongings or breaking down big projects challenging."
+        "example": "You need help getting started on tasks, rely on visual schedules and checklists, struggle with time management or prioritizing what to do first, and find organizing your belongings or breaking down big projects challenging."
       },
       {
         "level": 3,
         "description": "Moderate impact",
-        "example": "You need regular support for planning and organizing, struggle significantly with multi-step tasks, working memory (holding and manipulating information in your mind), task initiation (just starting things), organizing thoughts into coherent speech or writing, and require structured systems and frequent reminders to manage your day."
+        "example": "You need regular support for planning and organizing, struggle significantly with multi-step tasks, working memory (holding information in your mind), task initiation (just starting things), and require structured systems and frequent reminders to manage your day."
       },
       {
         "level": 4,
@@ -285,22 +285,22 @@
       {
         "level": 1,
         "description": "Minimal impact",
-        "example": "Unexpected changes annoy or bother you, you prefer routines or knowing the plan ahead of time, you have strong opinions about what's right or wrong, but you can adapt after taking a moment to mentally adjust."
+        "example": "Unexpected changes annoy or bother you and you prefer routines or knowing the plan ahead of time, but you can adapt after taking a moment to mentally adjust."
       },
       {
         "level": 2,
         "description": "Mild challenges",
-        "example": "Changes to plans cause noticeable stress, frustration, or anxiety, you need advance warning for transitions, you might get stuck on certain ideas or ways of doing things, you have a strong sense of fairness and find it hard to 'let go' when rules are broken or things seem unjust, and seeing things from other perspectives takes real effort."
+        "example": "Changes to plans cause noticeable stress, frustration, or anxiety, you need advance warning for transitions, you might get stuck on certain ideas or ways of doing things, and seeing things from other perspectives takes real effort."
       },
       {
         "level": 3,
         "description": "Moderate impact",
-        "example": "Routine changes cause significant distress or anxiety, you get stuck on ideas and have serious trouble shifting your thinking or considering alternatives, you have a rigid moral code and become very upset when people break rules or act unfairly (even in small ways), switching tasks can be very difficult, and you need structured support to handle unexpected situations."
+        "example": "Routine changes cause significant distress or anxiety, you get stuck on ideas and have serious trouble shifting your thinking or considering alternatives, switching tasks can be very difficult, and you need structured support to handle unexpected situations."
       },
       {
         "level": 4,
         "description": "Substantial challenges",
-        "example": "Changes cause severe anxiety, meltdowns, or shutdowns, you require highly predictable routines with extensive preparation for any variations, thinking flexibly or seeing alternatives is extremely difficult, you have an intense reaction to any perceived injustice or rule-breaking that can dominate your thoughts and feelings, and you strongly revert to familiar patterns even when they don't work."
+        "example": "Changes cause severe anxiety, meltdowns, or shutdowns, you require highly predictable routines with extensive preparation for any variations, thinking flexibly or seeing alternatives is extremely difficult, and you strongly revert to familiar patterns even when they don't work."
       },
       {
         "level": 5,
