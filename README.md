@@ -93,3 +93,47 @@ Modify the CSS styles in the `<style>` section of `index.html` to customize appe
 ## Development
 
 This is a single-file HTML application with embedded JavaScript and CSS. No build process or dependencies are required beyond Node.js for the embed script.
+
+## Use Disclaimer
+
+**IMPORTANT: PLEASE READ THIS DISCLAIMER CAREFULLY BEFORE USING THIS TOOL**
+
+### Relationship to MIT License
+
+This software is distributed under the MIT License (see [LICENSE](LICENSE) file), which grants you broad rights to use, copy, modify, merge, publish, distribute, sublicense, and sell the software. This use disclaimer is **supplementary to and does not modify** the MIT License. Your rights under the MIT License remain unchanged. This disclaimer provides additional important guidance and protections specific to the nature and appropriate use of this particular application.
+
+### Educational and Experimental Tool
+
+This Interactive Autism Wheel (the "Tool") is an experimental educational resource created for informational and educational purposes. The Tool provides general information about autism spectrum characteristics for learning and awareness purposes.
+
+### Not a Medical or Diagnostic Instrument
+
+**CRITICAL MEDICAL DISCLAIMER**: This Tool is **NOT** an official, validated, or approved method for diagnosing autism spectrum disorder or any other medical condition. The Tool does not constitute medical advice, professional diagnosis, treatment, or intervention of any kind. The trait levels, descriptions, and assessment criteria contained herein have not been clinically validated, professionally calibrated, or subjected to peer review.
+
+### Creator Qualifications and Data Sources
+
+This Tool was **NOT** created by licensed medical professionals, autism specialists, psychologists, psychiatrists, or other qualified healthcare practitioners. The information, trait descriptions, and assessment criteria are compiled from publicly available internet sources and the creator's personal experience as the parent of a teenager on the autism spectrum. No professional medical expertise was involved in the development of this Tool.
+
+### Additional Warranties and Liability (Supplementary to MIT License)
+
+**In addition to** the warranty disclaimers and liability limitations provided in the MIT License, the creators specifically disclaim any warranties regarding the medical accuracy, clinical validity, diagnostic reliability, or therapeutic value of the content and assessments provided by this Tool.
+
+**Beyond** the general software liability limitations in the MIT License, users specifically assume all risk related to any medical, diagnostic, or therapeutic reliance on this Tool. Any such reliance is entirely at the user's sole discretion and risk.
+
+### Additional Assumption of Risk and Release (Medical/Diagnostic Risks)
+
+**Regarding medical and diagnostic use specifically**, you expressly assume all risks associated with any medical or diagnostic reliance on this Tool and release and waive any claims against the creators, contributors, and distributors arising from such medical or diagnostic use or reliance.
+
+### Professional Medical Care
+
+**SEEK PROFESSIONAL MEDICAL ADVICE**: This Tool is not intended to replace professional medical consultation, diagnosis, or treatment. If you have concerns about autism spectrum disorder or related conditions for yourself or others, please consult with qualified healthcare professionals, licensed psychologists, developmental specialists, or other appropriate medical practitioners.
+
+### Additional Indemnification (Medical/Diagnostic Claims)
+
+**In addition to** your rights and obligations under the MIT License, you agree to indemnify, defend, and hold harmless the creators, contributors, and distributors from and against any claims, damages, losses, costs, and expenses (including reasonable attorneys' fees) arising specifically from medical or diagnostic use or reliance on this Tool, or from any representation that this Tool constitutes professional medical or diagnostic services.
+
+### Governing Law
+
+This disclaimer shall be governed by and construed in accordance with applicable local laws, consistent with the MIT License terms.
+
+**BY USING THIS TOOL, YOU ACKNOWLEDGE THAT YOU HAVE READ AND UNDERSTOOD THIS DISCLAIMER AND THE MIT LICENSE, AND AGREE THAT BOTH APPLY TO YOUR USE OF THIS SOFTWARE.**
