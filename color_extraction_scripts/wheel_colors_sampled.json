@@ -4,7 +4,7 @@
     "2": "#fff770",
     "3": "#fff42a",
     "4": "#fff000",
-    "5": null
+    "5": "#fcec4f"
   },
   "Social Interaction": {
     "1": "#fef1b9",
@@ -14,11 +14,11 @@
     "5": "#fbb800"
   },
   "Speech": {
-    "1": "#fee1b8",
-    "2": "#fdc071",
-    "3": "#fda229",
-    "4": "#fc8201",
-    "5": null
+    "1": "#fae2bc",
+    "2": "#f4c37e",
+    "3": "#f0a647",
+    "4": "#f0a647",
+    "5": "#ea6e2e"
   },
   "Sensory Sensitivities": {
     "1": "#fdceba",
@@ -46,7 +46,7 @@
     "2": "#b684cb",
     "3": "#9248b0",
     "4": "#6c0b96",
-    "5": null
+    "5": "#410777"
   },
   "Intense Interests": {
     "1": "#d8cafe",
